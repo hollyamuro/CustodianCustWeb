@@ -1,0 +1,143 @@
+body {
+  /* padding: 50px; */
+  /* font: 14px "Lucida Grande", Helvetica, Arial, sans-serif; */
+  font: 14px;
+  font-family: "Microsoft JhengHei";
+}
+
+/* a {
+  color: #00B7FF;
+} */
+
+/* Sticky footer styles */
+html {
+  position: relative;
+  min-height: 100%;
+}
+body {
+  /* Margin bottom by footer height */
+  margin-bottom: 70px;
+}
+
+.sinopac-header-icon {
+  width: 100%;
+}
+
+.version-frame {
+  width: 100%;
+  background-color: #f8f9fa;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  /* Set the fixed height of the footer here */
+  height: 70px;
+  background-color: #f8f9fa;
+}
+
+/* align */
+.align-right{
+  text-align: right;
+  /* padding-top: 10px;
+  padding-right: 10px;
+  padding-bottom: 10px; */
+}
+
+.align-left{
+  text-align: left;
+}
+
+.align-center{
+  text-align: center;
+}
+
+.inline{
+  display: inline-block;  
+}
+
+.login-frame {
+  margin-top: 50px;
+}
+
+.menu-title {
+  padding-left: 10px;
+  color: #4d4d4d;
+  font-weight: bold;
+}
+
+/*hr styles*/
+hr.line{
+  border-top: 1px solid #000000;
+}
+
+hr.double-line {
+	border-top: 3px double #000000;
+}
+
+/*desplay inline and silder*/
+.img_silder {
+  margin: 0px auto;
+  width:100%;
+	position: relative;
+	border: 1px solid#ccc;
+  overflow: hidden;
+	padding-bottom:60%; /*依照圖片比例自動延展高度*/
+}
+.img_silder ul, .img_silder ul li {
+  width: 100%;
+  height: 100%;
+	position:absolute;
+	margin: 3px;
+	padding: 3px;
+	list-style: none;
+}
+.img_silder ul li {
+	z-index: 1;
+}
+.img_silder ul li.selected {
+	z-index: 3;
+}
+.img_silder img
+{
+  position:absolute;
+	width:100%;
+	margin:auto;
+}
+/*desplay prev next picture */
+.prev {
+	width: 38px;
+	height: 48px;
+	position: absolute;
+	left: 3%;
+	top: 50%;	/* (區塊高-圖片高) / 2 */
+	z-index: 4;
+}
+.next {
+	width: 38px;
+	height: 48px;
+	position: absolute;
+	right:1%;
+	top: 50%;
+	z-index:4;
+}
+/*login box*/
+.login-box
+{
+  padding:30px;
+  width:150px; 
+  margin-bottom:10px; 
+  text-align:center;
+  background:#000;  
+  opacity:0.6; 
+  z-index: 5;
+}
+.login-box p
+{ 
+  color:#fff;
+  font-family:'微軟正黑體'; 
+  text-align:center;
+  font-size:16px;
+  z-index: 5;
+}

@@ -1,0 +1,31 @@
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include partials/template_head.ejs %>
+  </head>
+  <body>
+   
+    <% var user_profile = user_profile; %>
+
+    <% include partials/template_nav_header.ejs %>
+    <% if(user_profile.login) { %>
+      <% include partials/template_sidebar.ejs %>
+    <% } %>
+
+  
+    <div class="container">    
+        <h5><%= message %></h5>
+        <div><%= error.stack %></div>
+    </div><!--container-->
+
+    <% include partials/template_body.ejs %>
+    <% include partials/template_footer.ejs %>
+    
+    <% if(locals.show_popup){ %>
+      <% var popup = locals.popup; %>
+      <% include partials/template_popup.ejs %>  
+    <% } %>
+
+  </body>  
+</html>
