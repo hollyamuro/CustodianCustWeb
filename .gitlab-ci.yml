@@ -1,0 +1,275 @@
+stages:
+  - backup_dev
+  - prepare_dev
+  - clean_dev
+  - install_dev
+  - build_dev
+  - test_dev
+  - deploy_dev
+  - backup_prod
+  - prepare_prod
+  - clean_prod
+  - install_prod
+  - build_prod
+  - test_prod
+  - deploy_prod
+  - failure_dev
+  - success_dev
+  - failure_prod
+  - success_prod
+
+backup_job_dev:
+  stage: backup_dev
+  script:
+    - pwd | xargs echo backup stage at date and directory
+    - cd /ap/CustodianCustWeb_BK
+    - rm -rf *
+    - cd /ap
+    - rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/$(date +%Y%m%d%H%M_BK)
+    - cd /ap/CustodianCustWeb/log
+    - mv err.log $(date +%Y%m%d%H%M_err.log)
+    - mv out.log $(date +%Y%m%d%H%M_out.log)
+    - cd /ap/CustodianCustWeb
+    - cp -r log /ap/CustodianCustWeb_LOG/$(date +%Y%m%d%H%M_log)    
+    - cd /ap/CustodianCustWeb/log
+    - rm *.log
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Dev
+  only:
+    - dev 
+
+prepare_job_dev:
+  stage: prepare_dev
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo prepare stage at date and directory
+    - npm run ci_function_dev forever CustodianCustWeb
+    - git reset --hard HEAD~
+    - git pull
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Dev
+  only:
+    - dev  
+
+clean_job_dev:
+  stage: clean_dev
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo clean stage at date and directory
+    - rm -rf node_modules/ package-lock.json
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Dev
+  only:
+    - dev 
+
+install_job_dev:
+  stage: install_dev
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo build stage at date and directory
+    - npm install
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Dev
+  only:
+    - dev
+
+build_job_dev:
+  stage: build_dev
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo build stage at date and directory
+    - npm run build_dev
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Dev
+  only:
+    - dev 
+  
+test_job_dev:
+  stage: test_dev
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo test stage at date and directory
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Dev
+  only:
+    - dev 
+
+deploy_job_dev:
+  stage: deploy_dev
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo deploy stage at date and directory
+    # - chmod u+x /ap/CustodianCustWeb/bin/version_linux.sh
+    - npm run forever_dev 
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Dev
+  only:
+    - dev 
+
+failure_job_dev:
+  stage: failure_dev
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo failure stage at date and directory
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Dev  
+  when: on_failure
+
+success_job_dev:
+  stage: success_dev
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo success stage at date and directory
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Dev  
+  when: on_success
+  
+  
+
+
+backup_job_prod:
+  stage: backup_prod
+  script:
+    - pwd | xargs echo backup stage at date and directory
+    - cd /ap/CustodianCustWeb_BK
+    - rm -rf *
+    - cd /ap
+    - rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/$(date +%Y%m%d%H%M_BK)
+    - cd /ap/CustodianCustWeb/log
+    # - mv err.log $(date +%Y%m%d%H%M_err.log)
+    # - mv out.log $(date +%Y%m%d%H%M_out.log)
+    - cd /ap/CustodianCustWeb
+    - cp -r log /ap/CustodianCustWeb_LOG/$(date +%Y%m%d%H%M_log)    
+    - cd /ap/CustodianCustWeb/log
+    # - rm *.log
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Prod
+  only:
+    - master  
+
+prepare_job_prod:
+  stage: prepare_prod
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo prepare stage at date and directory
+    # - npm run ci_function_dev forever CustodianCustWeb
+    - sudo git reset --hard HEAD~
+    - sudo git pull
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Prod
+  only:
+    - master   
+
+clean_job_prod:
+  stage: clean_prod
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo clean stage at date and directory
+    - rm -rf node_modules/ package-lock.json
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Prod
+  only:
+    - master  
+
+install_job_prod:
+  stage: install_prod
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo build stage at date and directory
+    - npm install
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Prod
+  only:
+    - master
+
+build_job_prod:
+  stage: build_prod
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo build stage at date and directory
+    # - npm run build
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Prod
+  only:
+    - master  
+  
+test_job_prod:
+  stage: test_prod
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo test stage at date and directory
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Prod
+  only:
+    - master  
+
+deploy_job_prod:
+  stage: deploy_prod
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo deploy stage at date and directory
+    # - chmod u+x /ap/CustodianCustWeb/bin/version_linux.sh
+    # - npm run forever_dev
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Prod
+  only:
+    - master  
+
+failure_job_prod:
+  stage: failure_prod
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo failure stage at date and directory
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Prod
+  only:
+    - master  
+  when: on_failure
+
+success_job_prod:
+  stage: success_prod
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo success stage at date and directory
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Prod
+  only:
+    - master  
+  when: on_success
+

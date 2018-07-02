@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include partials/template_head.ejs %>
+  </head>
+  <body>
+   
+
+    <% var user_profile = user_profile; %>
+
+    <% include partials/template_nav_header.ejs %>
+    <% if(user_profile.login) { %>
+      <% include partials/template_sidebar.ejs %>
+    <% } %>
+
+  
+    <div class="container ">    
+        <% if(!user_profile.login) { %>
+          <% include partials/template_login.ejs %>
+        <% } else { %>
+          <p><div  id="main" class ="jumbotron">Welcome <%= title %></div></p>
+        <% } %>
+    </div><!--container-->
+
+    <% include partials/template_body.ejs %>
+    <% include partials/template_footer.ejs %>
+    
+    <% if(locals.show_popup){ %>
+      <% var popup = locals.popup; %>
+      <% include partials/template_popup.ejs %>  
+    <% } %>
+
+  </body>  
+</html>

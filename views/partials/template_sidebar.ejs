@@ -1,0 +1,42 @@
+<nav class="navbar navbar-expand-xl navbar-light bg-light"> 
+    
+    <a class = "navbar-brand"></a>
+
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#nav_list">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="nav_list">
+
+        <span></span>
+        <ul class="navbar-nav">
+            <% for(let s in user_profile.permission){ %>
+                <li class="nav-item dropdown active">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="#"><%= s %> - <%= user_profile.permission[s].name %></a>
+
+                    <div class="dropdown-menu">
+                            <% for( let c in user_profile.permission[s] ) { %>
+                                <% if( c !='id' && c !='name' && c !='description' ) { %>
+                                    <div>
+                                        <div class ="menu-title"><%= c %> - <%= user_profile.permission[s][c].name %></div>
+                                        <% for( let f in user_profile.permission[s][c] ) { %>
+                                            <% if( f !='id' && f !='name' && f !='description') { %>
+                                                <a class="dropdown-item" href="<%- user_profile.permission[s][c][f].url %>" >
+                                                    <%= f %> - <%= user_profile.permission[s][c][f].name %>
+                                                </a>
+                                            <% } %>
+                                        <% } %>
+                                    </div>
+                                    <div class="dropdown-divider"></div>
+                                <% } %>
+                            <% } %>
+                    </div>
+                </li>                
+            <% } %>
+            <li class="nav-item active">
+                    <a class="nav-link" href="/logout">SIGN OUT</a>
+            </li>
+        </ul>
+
+    </div>
+</nav>

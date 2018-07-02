@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <% include ../../partials/template_head.ejs %>
+  </head>
+  <body>
+    
+    <% include ../../partials/template_nav_header.ejs %>
+    <% if(user_profile.login) { %>
+      <% include ../../partials/template_sidebar.ejs %>
+    <% } %>
+
+    <% include ../../partials/template_body.ejs %>
+
+    
+    <% include ../../partials/template_footer.ejs %>
+    
+    <% if(locals.show_popup){ %>
+      <% var popup = locals.popup; %>
+      <% include ../../partials/template_popup.ejs %>  
+    <% } %>
+
+  </body>  
+</html>
+
+
+<script>
+    function onCreateUserDeptChange(select){
+        $('#selected_create_dept').val(select.options[select.selectedIndex].value);
+    }
+    function onCreateUserEmployeeChange(select){
+        $('#selected_create_employee').val(select.options[select.selectedIndex].value);
+    }
+</script>
