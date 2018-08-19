@@ -1,0 +1,60 @@
+
+.card{
+    display: 'flex';
+    width: 50%;
+    background-color: #ada9a9;
+    margin-top: 100px;
+    margin: auto;
+    border-radius: 20px;
+}
+
+.card-container{
+    margin-top: 50px;
+
+}
+
+.card-body{
+    text-align: left;
+}
+
+.card-text{
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #ada9a9;
+    border-radius: 20px;
+    text-align: center;
+    
+}
+
+.card-input{
+    display: block;
+    width: 100%;
+    padding: .375rem .75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #495057;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 10px;
+    transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.btn-verify{
+    color: #fff;
+    background-color: #343a40;
+    border-color: #343a40;
+    border-radius: 10px;
+    vertical-align: super;
+}
+
+.btn-Back{
+    border-radius: 10px;
+    vertical-align: super;
+}
+
+.label{
+    text-align: left;
+}

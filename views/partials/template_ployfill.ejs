@@ -1,0 +1,9 @@
+<script>
+    let modernBrowser = ('assign' in Object);
+    if (!modernBrowser) {
+        let scriptElement = document.createElement('script');
+        scriptElement.async = false;
+        scriptElement.src = '/dist/polyfill_bundle.js';
+        document.head.appendChild(scriptElement);
+    }
+</script>

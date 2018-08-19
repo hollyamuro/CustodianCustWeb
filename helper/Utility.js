@@ -3,7 +3,7 @@
  * @module helper/Utility.js
  */
 
- "use strict";
+"use strict";
 
 /**
  * 設定session參數
@@ -20,15 +20,15 @@ module.exports.sessionConfigureHandler = (session)=>{
 		saveUninitialized: false,
 		cookie: { maxAge: 4 * 60 * 60 * 1000 }    // 4 hours
 	};
-
+	const redis = require("connect-redis")(session);
+	const mongodb = require("connect-mongo")(session);
 	switch(config[process.env.NODE_ENV].default_session_database.toString().trim()){
 	case "redis":
-		const redis = require("connect-redis")(session);
-	        sessionProps.store = new redis(config[process.env.NODE_ENV].redis);
+		sessionProps.store = new redis(config[process.env.NODE_ENV].redis);
 		break;
 	case "mongodb":
-		const mongodb = require("connect-mongo")(session);
 		sessionProps.store = new mongodb(config[process.env.NODE_ENV].mongodb);
+		break;
 	default:
 		//throw error here
 		process.exit(1);
@@ -53,6 +53,11 @@ module.exports.systemInfoHandler = (req, res, next) => {
 	let sysDate = "";
 	let remoteSysHash = "";
 	let remoteSysDate = "";
+	debug(startDate);
+	debug(sysHash);
+	debug(sysDate);
+	debug(remoteSysHash);
+	debug(remoteSysDate);
 
 	Promise.all([
 		systemInformation.getSystemStartVersion(),
@@ -165,8 +170,108 @@ module.exports.sendRequestHandler = function( target, data, requester, dataHandl
  * 取得權限列表
  * @param  {Object} premissionList
  */
-module.exports.getNavbarPermission = (premissionList) => {
+module.exports.getNavbarPermission = (permissionList) => {
 	
 	const systemHierarchy = require("./SystemHierarchy");
-	return systemHierarchy;
-}
+	// return systemHierarchy;
+
+	let structPermission = {};
+	for(let i=0; i<permissionList.length; i++){
+		
+		let sys = permissionList[i].System_Id;
+		let dir = permissionList[i].Directory_Id;
+		let fun = permissionList[i].Function_Id;
+		let auth = permissionList[i].Auth;
+
+		if(	!systemHierarchy.hasOwnProperty(sys) ||
+			!systemHierarchy[sys].hasOwnProperty(dir) ||
+			!systemHierarchy[sys][dir].hasOwnProperty(fun))
+			continue;
+			
+		if(!structPermission.hasOwnProperty(sys)){
+			structPermission[sys] = {
+				name: systemHierarchy[sys].name,
+			};
+		}
+
+		if(!structPermission[sys].hasOwnProperty(dir)){
+			structPermission[sys][dir] = {
+				name: systemHierarchy[sys][dir].name,
+			};
+		}
+
+		if(!structPermission[sys][dir].hasOwnProperty(fun)){
+			structPermission[sys][dir][fun] = {
+				name: systemHierarchy[sys][dir][fun].name,
+				url: systemHierarchy[sys][dir][fun].url,
+				auth: auth,
+			};
+		}
+	}
+
+	return structPermission;
+};
+
+/**
+ * 透過外部三方，認證取得確切client端IP
+ * @return IP/NA
+ */
+module.exports.getUserIP = () => 
+{
+	try
+	{
+		const debug = require("debug")("CustodianCustWeb:Utility.getUserIP");
+		const os =  require("os");
+		const ifaces = os.networkInterfaces();
+		
+		return new Promise( (resolve, reject ) => {
+			Object.keys(ifaces).forEach(function (ifname) {
+				let alias = 0;
+				ifaces[ifname].forEach(function (iface) {
+					if ("IPv4" !== iface.family || iface.internal !== false) {
+					// skip over internal (i.e. 127.0.0.1) and non-ipv4 addresses
+						return;
+					}
+					if (alias >= 1) {
+					// this single interface has multiple ipv4 addresses
+					} else {
+					// this interface has only one ipv4 adress
+						debug(iface.address);
+						resolve(iface.address);
+					}
+					++alias;
+				});
+			});
+		});
+	}
+	catch(err){
+		throw(err);
+	}
+};
+
+/**
+ * 檢查輸入資料
+ * @param  {Object} inputdata
+ */
+module.exports.checkInputData = async(inputdata) => 
+{
+	const debug = require("debug")("CustodianCustWeb:Utility.checkInputData");
+
+	try
+	{
+		const InputDataRegexp = /['"/*\\]/;
+		return new Promise( (resolve, reject ) => {
+			Object.keys(inputdata).forEach(element => {
+				debug(inputdata[element]);
+				debug(inputdata[element].search(InputDataRegexp));
+				if(inputdata[element].search(InputDataRegexp)>=0){
+					resolve(false);
+				} 
+			});
+			resolve(true);
+		});
+	}
+	catch(err){
+		throw(err);
+	}
+};

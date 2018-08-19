@@ -35,19 +35,36 @@ module.exports.getPageTitle = ( url ) => {
 };
 
 /**
+ * 取得權限資訊
+ * @param  {} permission 權限列表
+ * @param  {} url 存取位置
+ */
+module.exports.getPageAuth = (permission, url) => {
+	let sys = url.substring(1, 5);
+	let dir = url.substring(5, 9);
+	let fun = url.substring(9, 13);
+
+	let authObj = {};
+	for(let i=0;i<permission[sys][dir][fun].auth.length;i++){
+		authObj[permission[sys][dir][fun].auth[i]] = true;
+	}
+	return authObj;
+};
+
+/**
  * 取得系統啟用日
  * @return {Object} {system_version_hash: '', system_version_date: '' }
  */
 module.exports.getSystemStartVersion = () =>{
-	try{
-		return {   
-			system_version_hash: "",
-			system_version_date: "****/**/**",	// put your release date here
-		};
-	}
-	catch(err){
-		throw err; 
-	}
+	// try{
+	return {   
+		system_version_hash: "",
+		system_version_date: "****/**/**",	// put your release date here
+	};
+	// }
+	// catch(err){
+	// throw err; 
+	// }
 };
 
 /**
@@ -179,22 +196,22 @@ module.exports.getRemoteSystemGitVersion = () => {
 module.exports.getSystemHierarchyArrayList = () => {
 	try
 	{
-		const systemHierarchy = require("./SystemHierarchy")
+		const systemHierarchy = require("./SystemHierarchy");
 		let list = [];
 		for(let sys in systemHierarchy ){
 			for(let dir in systemHierarchy[sys] ) {
 				if( dir !=="id" && dir !=="name" && dir !=="description"  ) {
-			  		for(let fun in systemHierarchy[sys][dir] ) {
-			  			if( fun !=='id' && fun !=='name' && fun !=='description'  ) {
+					for(let fun in systemHierarchy[sys][dir] ) {
+						if( fun !=="id" && fun !=="name" && fun !=="description"  ) {
 							list.push({
-									"sys": systemHierarchy[sys].id,
-									"dir": systemHierarchy[sys][dir].id,
-									"fun": systemHierarchy[sys][dir][fun].id,
-									"show_name": systemHierarchy[sys].name + "/" + systemHierarchy[sys][dir].name + "/" + systemHierarchy[sys][dir][fun].name,
+								"sys": systemHierarchy[sys].id,
+								"dir": systemHierarchy[sys][dir].id,
+								"fun": systemHierarchy[sys][dir][fun].id,
+								"show_name": systemHierarchy[sys].name + "/" + systemHierarchy[sys][dir].name + "/" + systemHierarchy[sys][dir][fun].name,
 							});
-			  			}
-			  		}
-			  	}
+						}
+					}
+				}
 			}
 		}
 		return list;
@@ -202,4 +219,4 @@ module.exports.getSystemHierarchyArrayList = () => {
 	catch(err){
 		throw(err);
 	}
-}
+};

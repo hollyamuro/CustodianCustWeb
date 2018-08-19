@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+		<% include partials/template_head.ejs %>
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+		<META HTTP-EQUIV="EXPIRES" CONTENT="Wed, 26 Feb 1997 08:21:57GMT">
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache,must-revalidate">
+  </head>
+  <body>
+    <% include partials/template_nav_header.ejs %>
+		<link rel='stylesheet' href='/css/view_style/CustodianCustWebStyle.css' />
+    <div>
+			<div class="card-container">	
+				<div class="card">
+					<div class="card-body">
+						<p class="card-text">Enter your email address and we will send you verify code to verify your mail address.</p>
+					</div>
+					<% if(type==="reset_url") { %>
+					<form class="inline" autocomplete="off" action="/resetpassword/email" method="post" id="myForm1">
+					<% } else { %>
+					<form class="inline" autocomplete="off" action="/verify/send" method="post" id="myForm1">
+					<% } %> 
+						<div class="card-body">
+							<input type="email" class="card-input" id="UserEmail" name="UserEmail" placeholder="Please enter your e-mail address." required="required"/>
+						</div>
+
+						<div class="card-body">
+							<button type="submit" class="btn btn-block btn-verify">
+								Get verify code
+							</button>
+						</div>
+					</form>
+				</div>
+			</div>
+		</div>
+
+    <% include partials/template_body.ejs %>
+		<% include partials/template_footer.ejs %>
+		
+		<% if(locals.show_popup){ %>
+      <% var popup = locals.popup; %>
+      <% include partials/template_popup.ejs %>  
+    <% } %>
+    
+  </body>  
+</html>
+<script type="text/javascript">
+	document.getElementById("myForm1").reset();
+	window.history.forward(1);
+</script>

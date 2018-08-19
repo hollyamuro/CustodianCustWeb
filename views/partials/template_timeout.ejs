@@ -1,0 +1,14 @@
+
+<script type="text/javascript">
+	var t = 1200;
+	function showTime()
+	{
+			t -= 1;
+			if(t==0)
+			{
+				location.href='/timeout';
+			}
+			setTimeout("showTime()",1000);
+	}
+	showTime();
+</script>

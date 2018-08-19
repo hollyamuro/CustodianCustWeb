@@ -1,32 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <% include partials/template_head.ejs %>
-  </head>
-  <body>
-   
-    <% var user_profile = user_profile; %>
 
-    <% include partials/template_nav_header.ejs %>
-    <% if(user_profile.login) { %>
-      <% include partials/template_sidebar.ejs %>
-    <% } %>
-  
-    <div class="container">
-        <p>
-          <h5>Demo</h5>
-          <hr class="style1"> 
-          <p><div id="main" class ="jumbotron">Demo Page</div></p>
-        </p>
-    </div><!--container-->
+<head>
+	<% include partials/template_ployfill.ejs %>
+	<% include partials/template_head.ejs %>
+</head>
 
-    <% include partials/template_body.ejs %>
-    <% include partials/template_footer.ejs %>
-    
-    <% if(locals.show_popup){ %>
-      <% var popup = locals.popup; %>
-      <% include partials/template_popup.ejs %>  
-    <% } %>
+<body>
+	<% include partials/template_body.ejs %>
+	<% include partials/template_nav_header.ejs %>
 
-  </body>  
+	<% if(locals.show_popup){ %>
+		<% var popup = locals.popup; %>
+		<% include partials/template_popup.ejs %>
+	<% } %>
+
+	<% if(user_profile.login) { %>
+
+		<% include partials/template_timeout.ejs %>
+		<% include partials/template_sidebar.ejs %>
+
+		<div class="container">
+			<p>
+				<h5>
+					<%= page_title %>
+				</h5>
+				<hr class="style1">
+			</p>
+			<p>
+				<div id="demo"></div>
+				<script src="/dist/vendors_bundle.js"></script>
+				<script src="/dist/demo_bundle.js"></script>
+			</p>
+		</div>
+		<!--container-->
+
+	<% } else { %>
+		<% include partials/template_no_permission.ejs %>
+	<% }  %>
+</body>
+<footer>
+	<% include partials/template_footer.ejs %>
+</footer>
+
 </html>

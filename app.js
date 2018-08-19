@@ -16,9 +16,8 @@ const packageHandler = () => {
 	// let favicon = require("serve-favicon");
 	let cookieParser = require("cookie-parser");
 	let bodyParser = require("body-parser");
-	const session = require("express-session");
-
-	const utility = require("./helper/Utility.js");
+	let helmet = require("helmet");
+	// const utility = require("./helper/Utility.js");
 
 	let app = express();
 
@@ -42,6 +41,9 @@ const packageHandler = () => {
 			}
 		}));
 
+	/* setup helmet*/
+	app.use(helmet());
+
 	// view engine setup
 	app.set("views", path.join(__dirname, "views"));
 	app.set("view engine", "ejs");
@@ -56,11 +58,12 @@ const packageHandler = () => {
 	app.use("/css", express.static(path.resolve(__dirname,"./node_modules/bootstrap-select/dist/css")));
 	app.use("/js", express.static(path.resolve(__dirname,"./node_modules/bootstrap-select/dist/js")));
 
+	// include octicons
+	app.use("/svg", express.static(path.resolve(__dirname,"./node_modules/octicons/build/svg")));
+	
+
 	/*system info setting*/
 	// app.use(utility.systemInfoHandler);
-
-	/* Set session*/
-	app.use(session(utility.sessionConfigureHandler(session)));
 
 	// uncomment after placing your favicon in /public
 	//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -68,7 +71,7 @@ const packageHandler = () => {
 	app.use(bodyParser.urlencoded({ extended: false }));
 	app.use(cookieParser());
 	app.use(express.static(path.join(__dirname, "public")));
-
+	
 	/* Auth */
 	app.use(require(path.resolve(__dirname,"./helper/Auth")));
 
@@ -77,7 +80,7 @@ const packageHandler = () => {
 	for(let i=0; i < routePolicy.length; i++){
 		app.use(routePolicy[i].url, require( path.resolve(__dirname,"routes") + routePolicy[i].dir));
 	}
-
+	
 	// catch 404 and forward to error handler
 	app.use( (req, res, next) => {
 		const error =  require("./helper/CustodianCustWebError");
@@ -93,7 +96,7 @@ const packageHandler = () => {
 		// set locals, only providing error in development
 		res.locals.message = (err.message)? err.message : new error.InternalServerError().message;
 		res.locals.error = req.app.get("env") === "development" ? err : {};
-
+		
 		// render the error page
 		res.status(err.status || new error.InternalServerError().status).render("error", { 
 			"title": systemInformation.getSystemTitle(),
@@ -103,6 +106,6 @@ const packageHandler = () => {
 	});
 
 	return app;
-}
+};
 
 module.exports = packageHandler();

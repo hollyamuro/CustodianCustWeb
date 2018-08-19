@@ -1,0 +1,39 @@
+/* align */
+.align-right{
+    text-align: right;
+}
+
+.align-left{
+    text-align: left;
+}
+
+.align-center{
+    text-align: center;
+}
+
+.inline{
+    display: inline-block;  
+}
+
+.align-right-mobile{
+    text-align: left;
+}
+
+@media (max-width: 736px) {
+    .align-right-mobile{
+        text-align: right;
+    }
+}
+
+.no-dot-list {
+    list-style-type: none;
+}
+
+.position-title {
+    font-weight: bold;
+}
+
+.cash-table, .bond-table, .rp-table, .rs-table {
+    border: 1px solid #ced4da;
+    padding: 10px;
+}

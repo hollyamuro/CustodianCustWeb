@@ -22,17 +22,16 @@ backup_job_dev:
   stage: backup_dev
   script:
     - pwd | xargs echo backup stage at date and directory
-    - cd /ap/CustodianCustWeb_BK
-    - rm -rf *
+    - cd /ap/CustodianCustWeb_BK/Source
+    - sudo rm -rf *
     - cd /ap
-    - rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/$(date +%Y%m%d%H%M_BK)
-    - cd /ap/CustodianCustWeb/log
-    - mv err.log $(date +%Y%m%d%H%M_err.log)
-    - mv out.log $(date +%Y%m%d%H%M_out.log)
+    - sudo rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/$(date +%Y%m%d%H%M_BK)
+    - sudo cp -r /ap/CustodianCustWeb/public/dist /ap/CustodianCustWeb_BK/Bundle/$(date +%Y%m%d%H%M_BUNDLE)
     - cd /ap/CustodianCustWeb
     - cp -r log /ap/CustodianCustWeb_LOG/$(date +%Y%m%d%H%M_log)    
     - cd /ap/CustodianCustWeb/log
-    - rm *.log
+    - sudo rm -rf *.log
+    
   variables:
     GIT_STRATEGY: none
   tags:
@@ -142,24 +141,20 @@ success_job_dev:
     - Dev  
   when: on_success
   
-  
-
-
 backup_job_prod:
   stage: backup_prod
   script:
     - pwd | xargs echo backup stage at date and directory
     - cd /ap/CustodianCustWeb_BK
-    - rm -rf *
+    - sudo rm -rf *
     - cd /ap
-    - rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/$(date +%Y%m%d%H%M_BK)
-    - cd /ap/CustodianCustWeb/log
-    # - mv err.log $(date +%Y%m%d%H%M_err.log)
-    # - mv out.log $(date +%Y%m%d%H%M_out.log)
+    - sudo rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/$(date +%Y%m%d%H%M_BK)
+    - sudo cp -r /ap/FundWeb/public/js /ap/FundWeb_BK/Bundle/$(date +%Y%m%d%H%M_BUNDLE)
     - cd /ap/CustodianCustWeb
     - cp -r log /ap/CustodianCustWeb_LOG/$(date +%Y%m%d%H%M_log)    
     - cd /ap/CustodianCustWeb/log
-    # - rm *.log
+    - sudo rm -rf *.log
+
   variables:
     GIT_STRATEGY: none
   tags:

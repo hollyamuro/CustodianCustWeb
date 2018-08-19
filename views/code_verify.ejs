@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+		<% include partials/template_head.ejs %>
+		<META HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
+		<META HTTP-EQUIV="EXPIRES" CONTENT="Wed, 26 Feb 1997 08:21:57GMT">
+		<META HTTP-EQUIV="Cache-Control" CONTENT="no-cache,must-revalidate">
+  </head>
+  <body>
+    <% include partials/template_nav_header.ejs %>
+		<link rel='stylesheet' href='/css/view_style/CustodianCustWebStyle.css' />
+    	<div>
+				<div class="card-container">
+					<div class="card">
+						<div class="card-body">
+							<p class="card-text">Enter your verify code. </p>
+						</div>
+							<% if(type==="reset_url") { %>
+							<form class="inline" autocomplete="off" action="/resetpassword/verify" method="post" id="myForm">
+							<% } else { %>
+							<form class="inline" autocomplete="off" action="/verify/verify" method="post" id="myForm">
+							<% } %>		
+								<div class="card-body form-group">
+									<label class="label" for="UserEmail">Email:</label>
+									<input type="text" class="card-input form-control" id="UserEmail" readonly name="UserEmail" value="<%- UserEmail %>">
+									<p></p>
+									<label class="label" for="VerifyCode">Verify code:</label>
+									<input type="text" class="card-input form-control" id="VerifyCode" name="VerifyCode" required="required" placeholder="Please enter your verify code."
+												required pattern="[A-Za-z0-9_]{1,30}" maxlength='30' title='格式錯誤'>
+									<p></p>
+									<button type="submit" class="btn btn-block btn-verify">Verify</button>
+								</div>
+							</form>
+					</div>
+				</div>
+			</div>
+
+    <% include partials/template_body.ejs %>
+		<% include partials/template_footer.ejs %>
+		
+		<% if(locals.show_popup){ %>
+      <% var popup = locals.popup; %>
+      <% include partials/template_popup.ejs %>  
+    <% } %>
+    
+  </body>  
+</html>
+
+<script type="text/javascript">
+	document.getElementById("myForm1").reset();
+	document.getElementById("myForm").reset();
+	window.history.forward(1);
+</script>

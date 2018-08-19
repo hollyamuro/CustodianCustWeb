@@ -2,25 +2,45 @@
 <html lang="en">
   <head>
     <% include partials/template_head.ejs %>
+    <link rel='stylesheet' href='/css/view_style/home_login_style.css' />
+    
   </head>
   <body>
    
 
     <% var user_profile = user_profile; %>
-
+    
     <% include partials/template_nav_header.ejs %>
     <% if(user_profile.login) { %>
       <% include partials/template_sidebar.ejs %>
+      <% include partials/template_timeout.ejs %>
     <% } %>
-
-  
-    <div class="container ">    
-        <% if(!user_profile.login) { %>
-          <% include partials/template_login.ejs %>
-        <% } else { %>
-          <p><div  id="main" class ="jumbotron">Welcome <%= title %></div></p>
-        <% } %>
-    </div><!--container-->
+    
+    <!--slide -->         
+    <div id="custodiancust-home" class="img_silder">
+         <ul> 
+            <li class="selected">
+                <img src="/images/1280_sinopac_extend.png" />
+            </li>
+            <li>
+                <img src="/images/1280_Sinopac_Taichong.jpg" />
+            </li>
+            <li>
+                <img src="/images/1280_Sinopac_Taipei.jpg"/>
+            </li>
+          </ul>
+           <!--向左按钮-->
+           <!--<div class="prev"><img src="/images/arrow_left.gif"></div>-->
+           <!--向右按钮-->
+           <!--<div class="next"><img src="/images/arrow_right.gif"></div>-->
+      <div class="login-box ">
+          <% if(!user_profile.login) { %>
+            <% include partials/template_login.ejs %>
+          <% } else { %>
+            <p><div  id="main" class ="jumbotron">Welcome <%= title %></div></p>
+          <% } %>
+      </div><!--container-->
+  </div>
 
     <% include partials/template_body.ejs %>
     <% include partials/template_footer.ejs %>

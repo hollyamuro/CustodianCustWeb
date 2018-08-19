@@ -59,22 +59,27 @@ module.exports.foreverCheck = function() {
 			return;
 		} 
 		else {
-			debug(results[0].restarts);
-			let restart_content = "Forever restarting script for " + results[0].restarts + " time. ";
-			if (results[0].restarts > 0) {
-				axiosRequest.post(server_path + mail_api_path, {
-					receivers: monitorConfig[process.env.NODE_ENV].developers.mail,
-					subject: "System is restarted with code. ",
-					content: restart_content,
-				})
-					.then(function(response) {
-						debug(response);
-					})
-					.catch(function(error) {
-						debug(error);
-					});
-				debug("Forever restarting script for " + results[0].restarts + " time");
-			}
+			results.forEach(element => {
+				debug(element.id);
+				if(element.id === "CustodianCustWeb"){
+					debug(element.restarts);
+					let restart_content = "Forever restart CustodianCustWeb script for " + element.restarts + " time. ";
+					if (element.restarts > 0) {
+						axiosRequest.post(server_path + mail_api_path, {
+							receivers: monitorConfig[process.env.NODE_ENV].developers.mail,
+							subject: "System is restarted with code. ",
+							content: restart_content,
+						})
+							.then(function(response) {
+								// debug(response);
+							})
+							.catch(function(error) {
+								// debug(error);
+							});
+						debug("Forever restart CustodianCustWeb script for " + element.restarts + " time");
+					}
+				}
+			});
 		}
 	});
 };

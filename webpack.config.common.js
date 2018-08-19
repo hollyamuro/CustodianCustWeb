@@ -1,11 +1,13 @@
-
 module.exports = {
+
 	entry: {		
-		custodiancust_data1_compoent:
-		"./src/component/custodiancust_data1_compoent/custodiancust_data1_compoent.js",
-		custodiancust_demo1_compoent:
-		"./src/component/custodiancust_demo1_compoent/custodiancust_demo1_compoent.js",	
-		
+		polyfill: "./src/components/Polyfill",
+		demo: "./src/components/demo.js",
+		dashboard: "./src/DashboardRender",
+		position_inquiry: "./src/PositionInquiryRender",
+		charge_off_history: "./src/ChargeOffHistoryRender",
+		not_charge_off_history: "./src/NotChargeOffHistoryRender",
+		monthly_statement_download: "./src/MonthlyStatementDownloadRender",
 	},
 	output: {
 		path: `${__dirname}/public/dist`,
@@ -16,10 +18,17 @@ module.exports = {
 			{
 				test: /\.js$/,
 				exclude: /node_modules/,
-				loader: "babel-loader",
-				query: {
-					presets: ["react"],
-				},
+				use: {
+					loader: "babel-loader"
+				}
+			},
+			{
+				test: /\.css$/,
+				loader: "style-loader",
+			},
+			{
+				test: /\.css$/,
+				loader:   "css-loader",
 			},
 		],
 	},
@@ -28,10 +37,10 @@ module.exports = {
 			chunks: "initial",
 			name: "vendors",
 			cacheGroups: {
-                vendors: {
-                    test: /node_modules\//,
-                },
-            }
+				vendors: {
+					test: /node_modules\//,
+				},
+			}
 		}
 	},
 };

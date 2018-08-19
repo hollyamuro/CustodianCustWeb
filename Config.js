@@ -44,8 +44,8 @@ module.exports = {
 		
 		/*backend*/
 		backend: {
-			host: "128.110.5.43",
-			// host: "localhost",    //for local dev
+			//host: "128.110.5.43",
+			host: "localhost",    //for local dev
 			port: "3001",
 			/*backend: (Backend request) Communication policy http/https*/
 			policy: "https",

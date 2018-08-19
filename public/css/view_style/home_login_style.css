@@ -1,0 +1,153 @@
+/*登入畫面圖片背框*/
+.img_silder {
+  margin: 0px auto;
+  width:100%;
+  position: relative;
+  border: 1px solid cornflowerblue;
+  overflow: hidden;
+  /*padding-bottom:30%; /*依照圖片比例自動延展高度*/
+}
+
+/*登入畫面圖片物件*/
+.img_silder ul,.img_silder ul li  {
+  width: 100%;
+  height: 100%;
+  position:absolute;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
+}
+
+/*登入畫面圖片物件  被壓在下面*/
+.img_silder ul li {
+    z-index: 1;
+}
+
+/*登入畫面圖片物件  顯示在最上面*/
+.img_silder ul li.selected {
+    z-index: 3;
+}
+
+.img_silder img
+{
+  position:absolute;
+	width:100%;
+	margin:auto;
+}
+
+
+/*前一張照片功能按鈕 */
+.prev {
+    width: 38px;
+    height: 48px;
+    position: absolute;
+    left: 3%;
+    top: 50%;	/* (區塊高-圖片高) / 2 */
+    z-index: 4;
+}
+
+/*後一張照片按鈕*/
+.next {
+    width: 38px;
+    height: 48px;
+    position: absolute;
+    right:1%;
+    top: 50%;
+    z-index:4;
+}
+/*圖片輪播 一張7秒共21秒*/
+.img_silder ul li
+{
+  -webkit-animation: round 24s linear infinite;
+  animation: round 24s linear infinite;
+}
+/*-webkit 是為了支援apple陣營  所以有前面有-webkit與前面沒有-webkit兩組定義，Round用%代表進度，100%時間24秒，每秒4%，每張圖8秒*/
+@-webkit-keyframes round {
+  8% {
+      opacity: 1;
+      filter: alpha(opacity=100);
+      z-index: 2;
+      /* 0 - 1秒 淡入*/
+  }
+  24% {
+      opacity: 1;
+      filter: alpha(opacity=100);
+      z-index: 3;
+      /* 1-6秒靜止*/
+  }
+  12% {
+      opacity: 0;
+      filter: alpha(opacity=0);
+      z-index: 2;
+      visibility: hidden;
+      /* 7秒淡出*/
+  }
+}
+@keyframes round {
+  8% {
+      opacity: 1;
+      filter: alpha(opacity=100);
+      z-index: 2;
+      /* 0 - 1秒 淡入*/
+  }
+  24% {
+      opacity: 1;
+      filter: alpha(opacity=100);
+      z-index: 3;
+      /* 1- 6秒靜止*/
+  }
+  12% {
+      opacity: 0;
+      filter: alpha(opacity=0);
+      z-index: 2;
+      visibility: hidden;
+      /* 7秒淡出*/
+  }
+}
+
+.img_silder ul li:nth-child(0) {
+  -webkit-animation-delay: 0s;
+          animation-delay: 0s;
+}
+
+.img_silder ul li:nth-child(1) {
+  -webkit-animation-delay: 8s;
+          animation-delay: 8s;
+}
+
+.img_silder ul li:nth-child(2) {
+  -webkit-animation-delay: 16s;
+          animation-delay: 16s;
+}
+
+/*登入方框 浮在所有人之上，半透明。*/
+.login-box
+{
+  position:relative;
+  padding:15px;
+  width: 100%;
+  max-width: 540px;
+  min-height: 500px;
+  margin: auto;
+  margin-bottom:10px; 
+  margin-right: auto;
+  margin-left: auto;
+  text-align:center;
+  opacity:0.9; 
+  z-index: 5;
+}
+
+.card-body
+{
+  position:relative;
+  padding:15px;
+  width: 100%;
+  /*max-width: 540px;*/
+  margin: auto;
+  margin-bottom:10px; 
+  margin-right: auto;
+  margin-left: auto;
+  text-align:left;
+  opacity:0.8; 
+  z-index: 5;
+}

@@ -10,15 +10,25 @@ module.exports = [
 
 	/* 系統框架 */
 	{ url: "/",                 	dir: "/SystemFrameRoute"},
+	{ url: "/verify",               dir: "/UserVerifyRoute"},
+	{ url: "/resetpassword",		dir: "/UserResetRoute"},
 
-	/* data */
-	{ url: "/S001C001F001",         dir: "/S001_custodian_web/C001_data/F001_data_inquiry1_route"},
+	/* 其他系統資訊 */
+	{ url: "/helper",               dir: "/HelperRoute"},
 
-	/* account */
-	// { url: "/S001C002F001",         dir: "/S001_custodian_web/C002_account/F001_"},
+	/* dashboard */
+	{ url: "/dashboard", 			dir: "/DashboardRoute"},
 
-	/* demo */
-	{ url: "/S001C003F001",         dir: "/S001_custodian_web/C003_demo/F001_demo1_route"},
+	/* data inquiry */
+	{ url: "/S001C001F001", 		dir: "/S001_custodian/C001_data_inquiry/F001_position_inquiry_route"},
+	{ url: "/S001C001F002", 		dir: "/S001_custodian/C001_data_inquiry/F002_not_charge_off_history_route"},
+	{ url: "/S001C001F003",         dir: "/S001_custodian/C001_data_inquiry/F003_charge_off_history_route"},
+
+	/* Data Download */
+	{ url: "/S001C002F001",         dir: "/S001_custodian/C002_data_download/F001_monthly_statement_download_route"},
+
+	/* personal setting */
+	{ url: "/S099C001F001",         dir: "/S099_setting/C001_personal_setting/F001_password_reset_route"},
 	
 	// /*固收託管庫存查詢系統*/
 	// /*Add New Route Here:...*/	

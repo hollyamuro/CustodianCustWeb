@@ -2,3 +2,4 @@
 /log/log*
 /log/err.log
 /log/out.log
+/public/dist

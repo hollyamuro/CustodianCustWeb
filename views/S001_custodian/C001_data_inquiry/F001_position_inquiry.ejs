@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <% include ../../partials/template_ployfill.ejs %>
+        <% include ../../partials/template_head.ejs %>
+</head>
+
+<body>
+    <% include ../../partials/template_body.ejs %>
+    <% include ../../partials/template_nav_header.ejs %>
+
+    <% if(locals.show_popup){ %>
+        <% var popup = locals.popup; %>
+        <% include ../../partials/template_popup.ejs %>
+    <% } %>
+
+    <% if(user_profile.login) { %>
+
+        <% include ../../partials/template_timeout.ejs %>
+        <% include ../../partials/template_sidebar.ejs %>
+
+        <div class="container">
+            <p>
+                <h5>
+                    <%= page_title %>
+                </h5>
+                <hr class="style1">
+            </p>
+            <% if( auth.R || auth.S ){ %>
+                <div id="position-inquiry"></div>
+                <script src="/dist/vendors_bundle.js"></script>
+                <script src="/dist/position_inquiry_bundle.js"></script>
+            <% } else { %>
+                <% include ../../partials/template_no_permission.ejs %>
+            <% }  %>
+        </div>
+
+    <% } else { %>
+        <% include ../../partials/template_no_permission.ejs %>
+    <% }  %>
+</body>
+<footer>
+    <% include ../../partials/template_footer.ejs %>
+</footer>
+
+</html>

@@ -9,6 +9,7 @@ module.exports = [
 	"/",
 	"/login",
 	"/logout",
+	"/timeout",
 	"/error",
 	"/demo"
 	/*Add path which do not need auth*/
