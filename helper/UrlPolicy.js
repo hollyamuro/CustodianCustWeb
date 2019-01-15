@@ -1,6 +1,6 @@
 /**
  * 不須認證的URL列表
- * @module helper/UrlPolicy.js
+ * @module helper/UrlPolicy
  */
 
 "use strict";
@@ -10,7 +10,6 @@ module.exports = [
 	"/login",
 	"/logout",
 	"/timeout",
-	"/error",
-	"/demo"
+	"/error",	
 	/*Add path which do not need auth*/
 ];

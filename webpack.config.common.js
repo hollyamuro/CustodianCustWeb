@@ -1,13 +1,13 @@
 module.exports = {
 
 	entry: {		
-		polyfill: "./src/components/Polyfill",
-		demo: "./src/components/demo.js",
+		polyfill: "./src/Polyfill",
 		dashboard: "./src/DashboardRender",
 		position_inquiry: "./src/PositionInquiryRender",
 		charge_off_history: "./src/ChargeOffHistoryRender",
 		not_charge_off_history: "./src/NotChargeOffHistoryRender",
 		monthly_statement_download: "./src/MonthlyStatementDownloadRender",
+		safekeeping: "./src/SafekeepingRender"
 	},
 	output: {
 		path: `${__dirname}/public/dist`,

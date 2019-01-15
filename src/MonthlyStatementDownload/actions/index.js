@@ -3,51 +3,40 @@
 /**
  * action type & action creators
  */
-
 import axios from "axios";
-import { Unauthorized, NotFound } from "../../SinoComponent/SinoErrorHander";
 
-export const REQUEST_LOAD_MONTHLY_STATEMENT = "REQUEST_LOAD_MONTHLY_STATEMENT";
-export const RECEIVE_LOAD_MONTHLY_STATEMENT = "RECEIVE_LOAD_MONTHLY_STATEMENT";
-export const LOAD_MONTHLY_STATEMENT = "LOAD_MONTHLY_STATEMENT";
-
-export const requestLoadMonthlyStatement = () => ({
-	type: REQUEST_LOAD_MONTHLY_STATEMENT,
+export const REQUEST_CHECK_PERMISSION = "REQUEST_CHECK_PERMISSION";
+export const RECEIVE_CHECK_PERMISSION = "RECEIVE_CHECK_PERMISSION";
+export const CHECK_PERMISSION = "CHECK_PERMISSION";
+export const requestCheckPermission = () => ({
+	type: REQUEST_CHECK_PERMISSION,
 	isLoading: true,
 });
-export const receiveLoadMonthlyStatement = () => ({
-	type: RECEIVE_LOAD_MONTHLY_STATEMENT,
+export const receiveCheckPermission = () => ({
+	type: RECEIVE_CHECK_PERMISSION,
 	isLoading: false,
 });
-export const loadMonthlyStatement = () => {
+export const checkPermission = ()=>{
 	return async (dispatch, getState) => {
 		try {
-			dispatch(requestLoadMonthlyStatement());
+			dispatch(requestCheckPermission());
 
-			// //do get user data
-			// const user = await axios.post(location.protocol + "//" + location.host + "/helper/user");
+			// do get user data
+			const user = await axios.post(location.protocol + "//" + location.host + "/helper/user");
 
-			// // do request 
-			// let result = await axios.post(
-			// 	location.protocol + "//" + location.host + "/S001C001F003/read", {
-			// 		data: {
-			// 			"account": user.data.data.user,
-			// 			"begin_date": getState().queryDate.from,
-			// 			"end_date": getState().queryDate.to,
-			// 		}
-			// 	}
-			// );
-
-			// // validate
-			// if (!result.data.code) throw new Unauthorized();
-			// if (result.data.code.type === "ERROR") throw Error(result.data.code.message);
-			// if (result.data.data.cash.length === 0 &&
-			// 	result.data.data.holdings.length === 0 ) throw new NotFound();
+			// unauthorized
+			if (!user.data.code) {
+				window.location = location.protocol + "//" + location.host;
+				return;
+			}
+			else {
+				if (user.data.code.type === "ERROR") throw Error(user.data.code.message);
+			}
 
 			// do reponse
-			dispatch(receiveLoadMonthlyStatement());
+			dispatch(receiveCheckPermission());
+
 		} catch (err) {
-			dispatch(setQueryYM(""));
 			dispatch(showMessage({
 				type: "ERROR",
 				title: "ERROR",
@@ -59,14 +48,12 @@ export const loadMonthlyStatement = () => {
 };
 
 
-
-//set inquiry month
-export const SET_QUERY_YM = "SET_QUERY_YM";
-export const setQueryYM = (ym) => ({
-	type: SET_QUERY_YM,
+//set YM
+export const SET_YM = "SET_YM";
+export const setYM = (ym) => ({
+	type: SET_YM, 
 	ym,
 });
-
 
 
 //show message alert

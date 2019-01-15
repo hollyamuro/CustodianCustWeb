@@ -3,16 +3,20 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Style = {
+const style = {
+	"display": "inline-block",
+};
+
+const inputStyle = {
 	"padding": "0px 20px",
 	"display": "inline-block",
-	"border-radius": "100px",
+	"borderRadius": "100px",
 };
 
 const SinoRoundTextBox = ({ title, hint, text, onTextChange }) => (
-	<div>
+	<div style={style}>
 		{((title === "") ? "" : (<small className="form-text text-muted">{title}</small>))}
-		<input style={Style}
+		<input style={inputStyle}
 			className="form-control"
 			type='text'
 			onChange={onTextChange}
@@ -24,8 +28,16 @@ const SinoRoundTextBox = ({ title, hint, text, onTextChange }) => (
 
 SinoRoundTextBox.propTypes = {
 	title: PropTypes.string.isRequired,
+	hint: PropTypes.string.isRequired,
 	text: PropTypes.string.isRequired,
 	onTextChange: PropTypes.func.isRequired,
+};
+
+SinoRoundTextBox.defaultProps = {
+	title: "",
+	hint: "",
+	text: "",
+	onTextChange: () => { },
 };
 
 export default SinoRoundTextBox;

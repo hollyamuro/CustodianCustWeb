@@ -1,6 +1,6 @@
 /**
  * 系統框架路由
- * @module routes/UserVerifyRoute.js
+ * @module routes/UserVerifyRoute
  */
 
 "use strict";
@@ -13,6 +13,7 @@ const UserVerifyRoute = () => {
 	// router.post("/init", UserVerifyController.init );
 	router.post("/send", UserVerifyController.send );
 	router.post("/verify", UserVerifyController.verify );
+	router.post("/vcode_init", UserVerifyController.verify_code_init );
 
 	/* other route add here */
 

@@ -5,15 +5,13 @@ import ShowButton from "../containers/ShowButton";
 import "../style.css";
 
 const ToolBar = () => (
-	<div className="row">
-		<div className="col-sm-4">
+	<div className="flex-container">
+		<div>
 			<ShowDatePicker />
 		</div>
-		<div className="col-sm-4 align-right-mobile">
-			<small><br /></small>
+		<div className="align-right-mobile">
 			<ShowButton />
 		</div>
-		<div className="col-sm-4"></div>
 	</div>
 );
 

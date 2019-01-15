@@ -3,23 +3,31 @@
 import React from "react";
 import PropTypes from "prop-types";
 import DayPickerInput from "react-day-picker/DayPickerInput";
+import { formatDate, parseDate, } from 'react-day-picker/moment';
 
 import "react-day-picker/lib/style.css";
 
-const Style = {
-	"padding-top": "8px",
+const style = {
+	"display": "inline-block",
+};
+
+const componentStyle = {
+	"paddingTop": "8px",
 };
 
 const SinoDatePicker = ({ title, text, disable_date, onTextChange }) => (
-	<div >
+	<div style={style}>
 		{((title === "") ? "" : (<small className="form-text text-muted">{title}</small>))}
-		<div style={Style}>
+		<div style={componentStyle}>
 			<DayPickerInput
 				onDayChange={onTextChange}
-				value={((text === "") ? undefined : text)}
+				value={text}
+				format="YYYY-MM-DD"
+				formatDate={formatDate}
+				parseDate={parseDate}
 				placeholder="YYYY-MM-DD"
 				dayPickerProps={{
-					selectedDays: ((text === "") ? undefined : text),
+					selectedDays: text,
 					disabledDays: disable_date,
 				}}
 			/>

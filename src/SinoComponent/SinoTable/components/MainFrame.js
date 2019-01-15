@@ -6,7 +6,7 @@ import ShowTitle from "../containers/ShowTitle";
 import ShowSearch from "../containers/ShowSearch";
 
 const MainFrame = () => (
-	<div>
+	<div className="scroll">
 		<div className="row">
 			<div className="col-sm-4"><ShowTitle /></div>
 			<div className="col-sm-4"></div>

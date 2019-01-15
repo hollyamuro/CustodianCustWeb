@@ -4,7 +4,7 @@ import { connect } from "react-redux";
 import SinoTable from "../../SinoComponent/SinoTable";
 
 const mapStateToProps = state => ({
-	title: "RP",
+	title: "Repo",
 	data: state.position.rp,
 	no_data_hint: "No Data.",
 	column_align: {

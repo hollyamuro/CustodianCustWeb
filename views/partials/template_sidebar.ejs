@@ -1,4 +1,4 @@
-<nav class="navbar navbar-expand-xl navbar-light bg-light">
+<nav class="navbar navbar-expand-xl navbar-light" style="background-color: #ffffff;">
 
     <a class="navbar-brand"></a>
 
@@ -30,7 +30,7 @@
                                     </div>
                                     <% for( let f in user_profile.permission_list[s][c] ) { %>
                                         <% if( f !='id' && f !='name' && f !='description') { %>
-                                            <a class="dropdown-item" href="<%- user_profile.permission_list[s][c][f].url %>">
+                                            <a class="dropdown-item nav-item" href="<%- user_profile.permission_list[s][c][f].url %>">
                                                 <img class="nav-icon" src="/svg/file.svg" />
                                                 <%= user_profile.permission_list[s][c][f].name %>
                                             </a>
@@ -51,3 +51,4 @@
 
     </div>
 </nav>
+<hr class="nav-divider">

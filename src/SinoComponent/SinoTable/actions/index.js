@@ -3,6 +3,7 @@
 /**
  * action type & action creators
  */
+import { setColumns, getCombinedColumns } from '../utils/helpers'
 
 export const SET_TABLE_TITLE = "SET_TABLE_TITLE";
 export const setTableTitle = (title) => ({
@@ -22,30 +23,11 @@ export const setNoDataHint = (hint) => ({
 	hint,
 });
 
-const getCombinedColumns = (data) => {
-	let allKeys = [];
-	data.map((row) => {
-		Object.keys(row).map((key) => {
-			if (!allKeys.includes(key)) allKeys.push(key);
-		});
-	});
-	return allKeys;
-};
-
-const setColumns = (customizedColumnNames, customizedColumnAlign, columns) => {
-	return columns.map((col) => ({
-		name: col,
-		show_name: (customizedColumnNames.hasOwnProperty(col) ? customizedColumnNames[col] : col),
-		align: (customizedColumnAlign.hasOwnProperty(col) ? customizedColumnAlign[col] : "left"),
-	}));
-};
-
-
 export const SET_TABLE_COLUMNS = "SET_TABLE_COLUMNS";
-export const setTableColumns = (data, col_name, col_align) => {
+export const setTableColumns = (data, col_name, col_align, col_size) => {
 	return {
 		type: SET_TABLE_COLUMNS,
-		columns: setColumns(col_name, col_align, getCombinedColumns(data)),
+		columns: setColumns(col_name, col_align, col_size, getCombinedColumns(data)),
 	};
 };
 

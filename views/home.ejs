@@ -1,54 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <% include partials/template_head.ejs %>
-    <link rel='stylesheet' href='/css/view_style/home_login_style.css' />
-    
-  </head>
-  <body>
-   
+    <link rel='stylesheet' href='/css/view_style/home_style.css' />
+</head>
 
+<body>
+    <div class="wrapper"></div>
+    <img class="sinopac-index-icon" src="/images/logo.png" alt="sinopac logo">
     <% var user_profile = user_profile; %>
-    
-    <% include partials/template_nav_header.ejs %>
-    <% if(user_profile.login) { %>
-      <% include partials/template_sidebar.ejs %>
-      <% include partials/template_timeout.ejs %>
-    <% } %>
-    
-    <!--slide -->         
-    <div id="custodiancust-home" class="img_silder">
-         <ul> 
-            <li class="selected">
-                <img src="/images/1280_sinopac_extend.png" />
-            </li>
-            <li>
-                <img src="/images/1280_Sinopac_Taichong.jpg" />
-            </li>
-            <li>
-                <img src="/images/1280_Sinopac_Taipei.jpg"/>
-            </li>
-          </ul>
-           <!--向左按钮-->
-           <!--<div class="prev"><img src="/images/arrow_left.gif"></div>-->
-           <!--向右按钮-->
-           <!--<div class="next"><img src="/images/arrow_right.gif"></div>-->
-      <div class="login-box ">
-          <% if(!user_profile.login) { %>
-            <% include partials/template_login.ejs %>
-          <% } else { %>
-            <p><div  id="main" class ="jumbotron">Welcome <%= title %></div></p>
-          <% } %>
-      </div><!--container-->
-  </div>
 
+    <% if(user_profile.login) { %>
+        <% include partials/template_sidebar.ejs %>
+        <% include partials/template_timeout.ejs %>
+    <% } %>
+
+    <% if(!user_profile.login) { %>
+        <div class="login-div" >
+            <p>
+                <div class="login-title">
+                    <div class="login-title-sub">Welcome</div>
+                    SinoPac Custody Service
+                </div>
+            </p>            
+            <button type="button" class="login-button" data-toggle="modal" data-target="#login_popup">
+                Login
+            </button>
+        </div>
+    <% } %>
+        
     <% include partials/template_body.ejs %>
     <% include partials/template_footer.ejs %>
-    
+
     <% if(locals.show_popup){ %>
-      <% var popup = locals.popup; %>
-      <% include partials/template_popup.ejs %>  
+        <% var popup = locals.popup; %>
+        <% include partials/template_popup.ejs %>
     <% } %>
 
-  </body>  
+    <div class="modal fade" id="login_popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-body">
+                <div class="modal-content login-modal-content">
+                <% if(!user_profile.login) { %>
+                        <% include partials/template_login.ejs %>
+                    <% } %>
+                </div>
+            </div> 
+        </div>
+    </div> 
+</body>
 </html>

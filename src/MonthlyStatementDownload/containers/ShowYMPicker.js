@@ -2,20 +2,8 @@
 
 import { connect } from "react-redux";
 import SinoSelect from "../../SinoComponent/SinoSelect";
-import { setQueryYM } from "../actions";
-
-const getLeastNMonth = (n = 0) => {
-	let returnValue = [];
-	for (let i = 0; i < n; i++) {
-		returnValue.push(i);
-	}
-
-	let current = new Date();
-	return ["", ...(returnValue.map((i) => {
-		let pre = new Date((new Date).setMonth((new Date).getMonth() - i));
-		return returnValue = pre.getFullYear() + "/" + (((pre.getMonth() + 1)>=10)?"":"0") + (pre.getMonth() + 1);
-	}))];
-}
+import { setYM } from "../actions";
+import { getLeastNMonth } from '../utils/helpers'
 
 const mapStateToProps = state => ({
 	title: "",
@@ -26,7 +14,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 	onOptionChange: (event) => {
-		dispatch(setQueryYM(event.target.value));
+		dispatch(setYM(event.target.value));
 	}
 });
 

@@ -2,7 +2,7 @@ import {
 	RECEIVE_LOAD_NOT_CHARGE_OFF,
 	SET_FROM_QUERY_DATE,
 	SET_TO_QUERY_DATE,
-	RESET_NOT_CHARGE_OFF,
+	SET_NOT_CHARGE_OFF,
 } from "../actions";
 
 export const notChargeOff = (
@@ -14,7 +14,7 @@ export const notChargeOff = (
 ) => {
 	switch (action.type) {
 	case RECEIVE_LOAD_NOT_CHARGE_OFF:
-	case RESET_NOT_CHARGE_OFF:
+	case SET_NOT_CHARGE_OFF:
 		return action.notChargeOff;
 	default:
 		return state;
@@ -23,8 +23,8 @@ export const notChargeOff = (
 
 export const queryDate = (
 	state = {
-		from: "",
-		to: "",
+		from: require("date-format")("yyyy-MM-dd", new Date()),
+		to: require("date-format")("yyyy-MM-dd", new Date()),
 	},
 	action
 ) => {

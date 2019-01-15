@@ -7,8 +7,9 @@ const Style = {
 	"margin": "5px",
 	"padding": "3px 10px 0px 5px",
 	"display": "inline-block",
-	"border-radius": "100px",
-	"min-width": "100px",
+	"borderRadius": "100px",
+	"minWidth": "100px",
+	"backgroundColor": "#FFFFFF",
 };
 
 const IconStype = {
@@ -18,7 +19,7 @@ const IconStype = {
 
 const SinoRoundButton = ({ text, octicons_icon, onButtonClick }) => (
 	<button
-		class="btn btn btn-outline-secondary"
+		className="btn btn-outline-secondary"
 		style={Style}
 		onClick={onButtonClick} >
 		{(octicons_icon !== "") ?

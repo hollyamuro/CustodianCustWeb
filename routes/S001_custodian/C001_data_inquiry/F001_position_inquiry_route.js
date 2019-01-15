@@ -1,6 +1,6 @@
 /**
  * 庫存查詢 routes
- * @module routes/S001_custodian/C001_data_inquiry/F001_position_inquiry_route.js
+ * @module routes/S001_custodian/C001_data_inquiry/F001_position_inquiry_route
  */
 
 module.exports = (() => {

@@ -1,6 +1,6 @@
 /**
  * 系統路由架構
- * @module helper/RoutePolicy.js
+ * @module helper/RoutePolicy
  */
 
 "use strict";
@@ -16,15 +16,16 @@ module.exports = [
 	/* 其他系統資訊 */
 	{ url: "/helper",               dir: "/HelperRoute"},
 
-	/* dashboard */
+	/* custodian - dashboard */
 	{ url: "/dashboard", 			dir: "/DashboardRoute"},
 
-	/* data inquiry */
+	/* custodian cust - data inquiry */
 	{ url: "/S001C001F001", 		dir: "/S001_custodian/C001_data_inquiry/F001_position_inquiry_route"},
 	{ url: "/S001C001F002", 		dir: "/S001_custodian/C001_data_inquiry/F002_not_charge_off_history_route"},
 	{ url: "/S001C001F003",         dir: "/S001_custodian/C001_data_inquiry/F003_charge_off_history_route"},
+	{ url: "/S001C001F004",         dir: "/S001_custodian/C001_data_inquiry/F004_safekeeping_route"},
 
-	/* Data Download */
+	/* custodian cust - data Download */
 	{ url: "/S001C002F001",         dir: "/S001_custodian/C002_data_download/F001_monthly_statement_download_route"},
 
 	/* personal setting */

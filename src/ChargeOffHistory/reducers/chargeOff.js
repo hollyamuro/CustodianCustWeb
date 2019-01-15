@@ -2,7 +2,7 @@ import {
 	RECEIVE_LOAD_CHARGE_OFF,
 	SET_FROM_QUERY_DATE,
 	SET_TO_QUERY_DATE,
-	RESET_CHARGE_OFF,
+	SET_CHARGE_OFF,
 } from "../actions";
 
 export const chargeOff = (
@@ -14,7 +14,7 @@ export const chargeOff = (
 ) => {
 	switch (action.type) {
 	case RECEIVE_LOAD_CHARGE_OFF:
-	case RESET_CHARGE_OFF:
+	case SET_CHARGE_OFF:
 		return action.chargeOff;
 	default:
 		return state;

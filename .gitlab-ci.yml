@@ -13,25 +13,33 @@ stages:
   - build_prod
   - test_prod
   - deploy_prod
+  - backup_backup
+  - prepare_backup
+  - clean_backup
+  - install_backup
+  - build_backup
+  - test_backup
+  - deploy_backup
   - failure_dev
   - success_dev
   - failure_prod
   - success_prod
+  - failure_backup
+  - success_backup
 
 backup_job_dev:
   stage: backup_dev
   script:
     - pwd | xargs echo backup stage at date and directory
     - cd /ap/CustodianCustWeb_BK/Source
-    - sudo rm -rf *
+    - rm -rf * #
     - cd /ap
-    - sudo rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/$(date +%Y%m%d%H%M_BK)
-    - sudo cp -r /ap/CustodianCustWeb/public/dist /ap/CustodianCustWeb_BK/Bundle/$(date +%Y%m%d%H%M_BUNDLE)
+    - rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/Source/$(date +%Y%m%d%H%M_BK) #
+    - cp -r /ap/CustodianCustWeb/public/dist /ap/CustodianCustWeb_BK/Bundle/$(date +%Y%m%d%H%M_BUNDLE) #
     - cd /ap/CustodianCustWeb
     - cp -r log /ap/CustodianCustWeb_LOG/$(date +%Y%m%d%H%M_log)    
     - cd /ap/CustodianCustWeb/log
-    - sudo rm -rf *.log
-    
+    - rm -rf *.log #
   variables:
     GIT_STRATEGY: none
   tags:
@@ -98,6 +106,7 @@ test_job_dev:
   script:
     - cd /ap/CustodianCustWeb
     - pwd | xargs echo test stage at date and directory
+    - npm run test
   variables:
     GIT_STRATEGY: none
   tags:
@@ -109,6 +118,7 @@ deploy_job_dev:
   stage: deploy_dev
   script:
     - cd /ap/CustodianCustWeb
+    - if [ -f "/ap/CustodianCustWeb/config/$(hostname -I | sed 's/\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*/\1/').js" ]; then cp "/ap/CustodianCustWeb/config/$(hostname -I | sed 's/\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*/\1/').js" /ap/CustodianCustWeb/Config.js; fi;
     - pwd | xargs echo deploy stage at date and directory
     # - chmod u+x /ap/CustodianCustWeb/bin/version_linux.sh
     - npm run forever_dev 
@@ -127,7 +137,9 @@ failure_job_dev:
   variables:
     GIT_STRATEGY: none
   tags:
-    - Dev  
+    - Dev
+  only:
+    - dev  
   when: on_failure
 
 success_job_dev:
@@ -138,23 +150,24 @@ success_job_dev:
   variables:
     GIT_STRATEGY: none
   tags:
-    - Dev  
+    - Dev
+  only:
+    - dev  
   when: on_success
   
 backup_job_prod:
   stage: backup_prod
   script:
     - pwd | xargs echo backup stage at date and directory
-    - cd /ap/CustodianCustWeb_BK
-    - sudo rm -rf *
+    - cd /ap/CustodianCustWeb_BK/Source
+    - rm -rf * #
     - cd /ap
-    - sudo rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/$(date +%Y%m%d%H%M_BK)
-    - sudo cp -r /ap/FundWeb/public/js /ap/FundWeb_BK/Bundle/$(date +%Y%m%d%H%M_BUNDLE)
+    - rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/Source/$(date +%Y%m%d%H%M_BK) #
+    - cp -r /ap/CustodianCustWeb/public/dist /ap/CustodianCustWeb_BK/Bundle/$(date +%Y%m%d%H%M_BUNDLE) #
     - cd /ap/CustodianCustWeb
     - cp -r log /ap/CustodianCustWeb_LOG/$(date +%Y%m%d%H%M_log)    
     - cd /ap/CustodianCustWeb/log
-    - sudo rm -rf *.log
-
+    - rm -rf *.log #
   variables:
     GIT_STRATEGY: none
   tags:
@@ -167,9 +180,9 @@ prepare_job_prod:
   script:
     - cd /ap/CustodianCustWeb
     - pwd | xargs echo prepare stage at date and directory
-    # - npm run ci_function_dev forever CustodianCustWeb
-    - sudo git reset --hard HEAD~
-    - sudo git pull
+    - npm run ci_function_prod forever CustodianCustWeb
+    - git reset --hard HEAD~ #
+    - git pull #
   variables:
     GIT_STRATEGY: none
   tags:
@@ -208,7 +221,7 @@ build_job_prod:
   script:
     - cd /ap/CustodianCustWeb
     - pwd | xargs echo build stage at date and directory
-    # - npm run build
+    - npm run build
   variables:
     GIT_STRATEGY: none
   tags:
@@ -221,6 +234,7 @@ test_job_prod:
   script:
     - cd /ap/CustodianCustWeb
     - pwd | xargs echo test stage at date and directory
+    - npm run test
   variables:
     GIT_STRATEGY: none
   tags:
@@ -232,9 +246,10 @@ deploy_job_prod:
   stage: deploy_prod
   script:
     - cd /ap/CustodianCustWeb
+    - if [ -f "/ap/CustodianCustWeb/config/$(hostname -I | sed 's/\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*/\1/').js" ]; then cp "/ap/CustodianCustWeb/config/$(hostname -I | sed 's/\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*/\1/').js" /ap/CustodianCustWeb/Config.js; fi;
     - pwd | xargs echo deploy stage at date and directory
     # - chmod u+x /ap/CustodianCustWeb/bin/version_linux.sh
-    # - npm run forever_dev
+    - npm run forever_prod
   variables:
     GIT_STRATEGY: none
   tags:
@@ -268,3 +283,132 @@ success_job_prod:
     - master  
   when: on_success
 
+
+
+backup_job_backup:
+  stage: backup_backup
+  script:
+    - pwd | xargs echo backup stage at date and directory
+    - cd /ap/CustodianCustWeb_BK/Source
+    - rm -rf * #
+    - cd /ap
+    - rsync -av --delete --exclude-from=/ap/CustodianCustWeb/exclusion.txt CustodianCustWeb CustodianCustWeb_BK/Source/$(date +%Y%m%d%H%M_BK) #
+    - cp -r /ap/CustodianCustWeb/public/dist /ap/CustodianCustWeb_BK/Bundle/$(date +%Y%m%d%H%M_BUNDLE) #
+    - cd /ap/CustodianCustWeb
+    - cp -r log /ap/CustodianCustWeb_LOG/$(date +%Y%m%d%H%M_log) #    
+    - cd /ap/CustodianCustWeb/log
+    - rm -rf *.log #
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Backup
+  only:
+    - master 
+
+prepare_job_backup:
+  stage: prepare_backup
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo prepare stage at date and directory
+    - npm run ci_function_prod forever CustodianCustWeb
+    - git reset --hard HEAD~
+    - git pull
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Backup
+  only:
+    - master  
+
+clean_job_backup:
+  stage: clean_backup
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo clean stage at date and directory
+    - rm -rf node_modules/ package-lock.json #
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Backup
+  only:
+    - master 
+
+install_job_backup:
+  stage: install_backup
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo build stage at date and directory
+    - npm install
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Backup
+  only:
+    - master
+
+build_job_backup:
+  stage: build_backup
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo build stage at date and directory
+    - npm run build
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Backup
+  only:
+    - master 
+  
+test_job_backup:
+  stage: test_backup
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo test stage at date and directory
+    - npm run test
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Backup
+  only:
+    - master 
+
+deploy_job_backup:
+  stage: deploy_backup
+  script:
+    - cd /ap/CustodianCustWeb
+    - if [ -f "/ap/CustodianCustWeb/config/$(hostname -I | sed 's/\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*/\1/').js" ]; then cp "/ap/CustodianCustWeb/config/$(hostname -I | sed 's/\([0-9]*\.[0-9]*\.[0-9]*\.[0-9]*\).*/\1/').js" /ap/CustodianCustWeb/Config.js; fi;
+    - pwd | xargs echo deploy stage at date and directory
+    # - chmod u+x /ap/CustodianCustWeb/bin/version_linux.sh
+    - npm run forever_prod 
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Backup
+  only:
+    - master 
+
+failure_job_backup:
+  stage: failure_backup
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo failure stage at date and directory
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Backup
+  only:
+    - master  
+  when: on_failure
+
+success_job_backup:
+  stage: success_backup
+  script:
+    - cd /ap/CustodianCustWeb
+    - pwd | xargs echo success stage at date and directory
+  variables:
+    GIT_STRATEGY: none
+  tags:
+    - Backup
+  only:
+    - master  
+  when: on_success

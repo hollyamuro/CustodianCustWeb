@@ -1,3 +1,8 @@
+/**
+ * 密碼重新設定 routes
+ * @module routes/S099_setting/C001_personal_setting/F001_password_reset_route
+ */
+
 const express = require("express");
 const router = express.Router();
 

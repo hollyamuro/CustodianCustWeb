@@ -20,7 +20,12 @@ module.exports.getUserData = async (req, res, next) => {
 	const axios = require("axios");
     
 	try{
-		const JwtUserProfile = await axios.post(local + "/api/cust/jwtverify", {"data":{ "token": req.cookies.access_token,}});
+		const JwtUserProfile = await axios.post(local + "/api/cust/jwtverify", {
+			"data":"",
+			"requester":req.user_profile.user,
+			"token": req.cookies.access_token,
+			"system": "CustodianCustWeb",
+		});
 		const Data = {
 			"user":				JwtUserProfile.data.data.user,
 			"user_name":		JwtUserProfile.data.data.user_name,
@@ -28,7 +33,7 @@ module.exports.getUserData = async (req, res, next) => {
 			"dept":				JwtUserProfile.data.data.dept,
 			"dept_name":		JwtUserProfile.data.data.dept_name,
 		};
-
+		
 		res.send({ "code" : { "type": "INFO", "message":  "請求成功。", }, "data" : Data });
 
 	}catch(e){
@@ -37,4 +42,25 @@ module.exports.getUserData = async (req, res, next) => {
 	}
 };
 
+/**
+ * 取的前一個工作日
+ * @param  {} req
+ * @param  {} res
+ * @param  {} next
+ */
+module.exports.getPreviousWorkDay = async (req, res, next) => {
+	try{
+		const axios = require("axios");
+		const config = require("../Config");
+		const local = 	config[process.env.NODE_ENV].backend.policy + "://" + 
+						config[process.env.NODE_ENV].backend.host + ":" +
+						config[process.env.NODE_ENV].backend.port;
+		const result = await axios.post( local + "/api/common/previous_work_date",{
+			"data": {}, 
+			"requester":req.user_profile.user,
+			"token": req.cookies.access_token,
+			"system": "CustodianCustWeb", });
+		res.send(result.data); 
 
+	}catch(e){ next(e); }
+};

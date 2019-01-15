@@ -1,6 +1,6 @@
 /**
  * 庫存查詢 routes
- * @module routes/S001_custodian/C001_data_inquiry/F002_not_charge_off_history_route.js
+ * @module routes/S001_custodian/C001_data_inquiry/F002_not_charge_off_history_route
  */
 
 module.exports = (() => {

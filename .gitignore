@@ -3,3 +3,6 @@
 /log/err.log
 /log/out.log
 /public/dist
+/public/doc/*.pdf
+/coverage
+/docs

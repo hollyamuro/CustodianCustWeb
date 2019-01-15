@@ -1,10 +1,10 @@
 import {
-	SET_QUERY_YM	
+	SET_YM	
 } from "../actions";
 
 export const ym = ( state = "", action ) => {
 	switch (action.type) {
-	case SET_QUERY_YM:
+	case SET_YM:
 		return action.ym;
 	default:
 		return state;

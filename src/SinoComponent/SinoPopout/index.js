@@ -2,21 +2,9 @@
 
 import React from "react";
 import PropTypes from "prop-types";
+import { getStyle } from './utils'
 
 import "./SinoPopout.css";
-
-const getStyle = (type) => {
-	switch (type) {
-	case "INFO":
-		return "secondary";
-	case "ERROR":
-		return "danger";
-	case "SUCCESS":
-		return "success";
-	default:
-		return "primary";
-	}
-};
 
 const SinoPopout = ({ type, title, text, enable, onClose }) => {
 	return ((enable) ?

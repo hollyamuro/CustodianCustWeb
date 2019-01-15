@@ -5,7 +5,8 @@ import SinoRangeDatePicker from "../../SinoComponent/SinoRangeDatePicker";
 import { setFromQueryDate, setToQueryDate } from "../actions";
 
 const mapStateToProps = state => ({
-	title: "Value Date",
+	title: "Trade Date",
+	show_hint: true,
 	date: state.queryDate,
 });
 

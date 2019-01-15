@@ -20,7 +20,7 @@
             <% include partials/template_timeout.ejs %>
             <% include partials/template_sidebar.ejs %>
 
-            <div class="container">
+            <div class="container-fluid">
                 <p>
                     <h5>
                         <%= page_title %>
@@ -28,8 +28,8 @@
                     <hr class="style1">
                 </p>
                 <div id="dashboard"></div>
-                <script src="/dist/vendors_bundle.js"></script>
-                <script src="/dist/dashboard_bundle.js"></script>
+                <script nonce= "<%= locals.nonce%>" src="/dist/vendors_bundle.js"></script>
+                <script nonce= "<%= locals.nonce%>" src="/dist/dashboard_bundle.js"></script>
             </div>
 
         <% } else { %>

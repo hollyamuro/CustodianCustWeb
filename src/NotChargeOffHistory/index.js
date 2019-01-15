@@ -7,6 +7,7 @@ import { createLogger } from "redux-logger";
 import { Provider } from "react-redux";
 import reducer from "./reducers";
 import MainFrame from "./components/MainFrame";
+import { initQuery } from "./actions";
 
 class App extends React.Component {
 
@@ -18,7 +19,15 @@ class App extends React.Component {
 		}
 		this.store = createStore(reducer, applyMiddleware(...middleWare));
 	}
-	
+
+	componentDidMount() {
+		this.store.dispatch(initQuery());
+	}
+
+	componentDidUpdate() {
+		this.store.dispatch(initQuery());
+	}
+
 	render() {
 		return (
 			<Provider store={this.store}>

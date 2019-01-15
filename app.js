@@ -1,7 +1,7 @@
 
 /**
  * 封包處理
- * @module app.js
+ * @module app
  */
 
 "use strict";
@@ -13,11 +13,11 @@ const packageHandler = () => {
 
 	let express = require("express");
 	let path = require("path");
-	// let favicon = require("serve-favicon");
+	let favicon = require("serve-favicon");
 	let cookieParser = require("cookie-parser");
 	let bodyParser = require("body-parser");
 	let helmet = require("helmet");
-	// const utility = require("./helper/Utility.js");
+	let utility = require("./helper/Utility.js");
 
 	let app = express();
 
@@ -41,12 +41,32 @@ const packageHandler = () => {
 			}
 		}));
 
+
+	app.use(express.static(path.join(__dirname, "public")));
+
 	/* setup helmet*/
+	const uuid = require(`uuid`)
+	app.use((req, res, next) => {
+		res.locals.nonce = uuid.v4();
+		next()
+	});
 	app.use(helmet());
+	app.use(helmet.contentSecurityPolicy({
+		directives: {
+			scriptSrc:		["'self'","'unsafe-eval'",(req, res) => `'nonce-${ res.locals.nonce }'`,'www.google.com/recaptcha/','www.gstatic.com/recaptcha/'],
+			frameSrc:		["'self'",'www.google.com/recaptcha/'],
+			imgSrc:			["'self'",'data:'],
+			fontSrc:		["'self'"],
+		}
+	}));
+	app.use(helmet.frameguard({ action: 'deny' }));
 
 	// view engine setup
 	app.set("views", path.join(__dirname, "views"));
 	app.set("view engine", "ejs");
+
+	// uncomment after placing your favicon in /public
+	app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 
 	// include bootstraps
 	app.use("/js", express.static(path.resolve(__dirname,"./node_modules/jquery/dist")));
@@ -63,15 +83,12 @@ const packageHandler = () => {
 	
 
 	/*system info setting*/
-	// app.use(utility.systemInfoHandler);
+	app.use(utility.systemInfoHandler);
 
-	// uncomment after placing your favicon in /public
-	//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 	app.use(bodyParser.json());
 	app.use(bodyParser.urlencoded({ extended: false }));
 	app.use(cookieParser());
-	app.use(express.static(path.join(__dirname, "public")));
-	
+		
 	/* Auth */
 	app.use(require(path.resolve(__dirname,"./helper/Auth")));
 
@@ -94,14 +111,25 @@ const packageHandler = () => {
 		const error =  require("./helper/CustodianCustWebError");
 
 		// set locals, only providing error in development
-		res.locals.message = (err.message)? err.message : new error.InternalServerError().message;
-		res.locals.error = req.app.get("env") === "development" ? err : {};
+		// res.locals.message = (err.message)? err.message : new error.InternalServerError().message;
+		res.locals.message = new error.InternalServerError().message;
+		res.locals.error = req.app.get("env") !== "production" ? err : {};
 		
 		// render the error page
 		res.status(err.status || new error.InternalServerError().status).render("error", { 
 			"title": systemInformation.getSystemTitle(),
 			"page_title": "Error",
-			"user_profile" : req.user_profile
+			"user_profile": {
+				"login": false,
+				"user": 			"",
+				"user_name": 		"",
+				"type":				"",
+				"sino_account":		"",
+				"permission_list":	[],
+				"product_list":		[],
+				"role_list":		[],
+				"system":			"",
+			},
 		});
 	});
 

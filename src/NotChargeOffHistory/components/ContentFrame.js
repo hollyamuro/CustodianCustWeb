@@ -23,7 +23,7 @@ const ContentFrame = ({ enable, }) => (
 		</div>) : ("")
 );
 
-ContentFrame.prototype = {
+ContentFrame.propTypes = {
 	enable: PropTypes.bool.isRequired,
 };
 ContentFrame.defaultProps = {

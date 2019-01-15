@@ -11,10 +11,14 @@ const TableComponent = ({ columns, data, sort, no_data_hint, onSortClick }) => (
 		: (
 			<table className="sino-table">
 				<thead className="sino-thead">
-					<tr className="sino-tr">
-						{columns.map((c) => (
-							<th className="sino-th" key={c} onClick={() => { onSortClick(c.name); }}>
-								<TableHeaderComponent
+					<tr className="sino-tr" key="thead-row">
+						{columns.map((c, colIdx) => (
+							<th key={"th-" + colIdx}
+								style={{ minWidth: (c.size === "") ? "auto" : c.size }}
+								className="sino-th"
+								onClick={() => { onSortClick(c.name); }}
+							>
+								<TableHeaderComponent key={"th-component-" + colIdx}
 									text={c.show_name}
 									status={(c.name === sort.sort_column) ? sort.sort_direct : 0}
 								/>
@@ -22,20 +26,35 @@ const TableComponent = ({ columns, data, sort, no_data_hint, onSortClick }) => (
 						))}
 					</tr>
 				</thead>
-				{data.map((row) => {
-					let cols = [];
-					columns.map((col) => {
-						cols.push(row.hasOwnProperty(col.name) ?
-							(<td className={"sino-td " + "sino-td-align-" + col.align} data-title={col.show_name}>{row[col.name]}</td>) :
-							(<td className="sino-td" data-title={col.show_name}><br /></td>));
-					});
+				<tbody>
+					{data.map((row, rowIdx) => {
+						let cols = [];
+						columns.map((col, colIdx) => {
+							cols.push(row.hasOwnProperty(col.name) ?
+								(<td key={"col-" + rowIdx + '-' + colIdx}
+									style={{ minWidth: (col.size === "") ? "auto" : col.size }}
+									className={"sino-td " + "sino-td-align-" + col.align}
+									data-title={col.show_name}
+								>
+									{row[col.name]}
+								</td>)
+								:
+								(<td key={"col-" + rowIdx + '-' + colIdx}
+									style={{ minWidth: (col.size === "") ? "auto" : col.size }}
+									className="sino-td" data-title={col.show_name}
+								>
+									<br />
+								</td>)
+							);
+						});
 
-					return (
-						<tr className="sino-tr">
-							{cols}
-						</tr>
-					);
-				})}
+						return (
+							<tr className="sino-tr" key={"row-" + rowIdx}>
+								{cols}
+							</tr>
+						);
+					})}
+				</tbody>
 			</table>
 		)
 );
@@ -43,13 +62,13 @@ const TableComponent = ({ columns, data, sort, no_data_hint, onSortClick }) => (
 TableComponent.propTypes = {
 	columns: PropTypes.arrayOf(
 		PropTypes.shape({
-			name: PropTypes.number.isRequired,
-			show_name: PropTypes.number.isRequired,
+			name: PropTypes.string.isRequired,
+			show_name: PropTypes.string.isRequired,
 		}).isRequired,
 	).isRequired,
 	data: PropTypes.array.isRequired,
 	sort: PropTypes.shape({
-		sort_column: PropTypes.number.isRequired,
+		sort_column: PropTypes.string.isRequired,
 		sort_direct: PropTypes.number.isRequired,
 	}),
 	no_data_hint: PropTypes.string.isRequired,

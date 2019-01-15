@@ -1,7 +1,7 @@
 
 /**
  * 取得系統資訊共用程式
- * @module helper/SystemInformation.js
+ * @module helper/SystemInformation
  */
 
 "use strict";
@@ -53,140 +53,56 @@ module.exports.getPageAuth = (permission, url) => {
 
 /**
  * 取得系統啟用日
- * @return {Object} {system_version_hash: '', system_version_date: '' }
  */
-module.exports.getSystemStartVersion = () =>{
-	// try{
-	return {   
-		system_version_hash: "",
-		system_version_date: "****/**/**",	// put your release date here
-	};
-	// }
-	// catch(err){
-	// throw err; 
-	// }
+module.exports.getSystemStartVersion = () => {
+	return ''; // put your release date here
 };
 
 /**
- * 取的目前前端(本程式)git版本&日期
- * @return {Object} {system_version_hash: '', system_version_date: '' }
+ * 取的目前前端版本
+ * @return {String} X.X.X
+ * 第一碼 大改版(例如:其他商品加入本系統)
+ * 第二碼 新功能
+ * 第三碼 修正bug
+ * 一次只變更一碼
  */
-module.exports.getSystemGitVersion = () => {
-	const debug = require("debug")("CustodianCustWeb:Utility.getSystemGitVersion");
-
-	try{
-
-		const os = require("os");
-		const iconv = require("iconv-lite");
-		const spawn = require("cross-spawn");
-		const path = require("path");
-		const format = require("date-format");
-
-		return new Promise((resolve, reject) => {
-		
-			debug(os.platform());
-			
-			let cmd = "";
-			switch(os.platform().toString().trim()){
-			case "win32":
-				cmd = path.resolve(__dirname, "..\\bin\\version_win.bat");
-				break;
-			case "linux":
-				cmd = path.resolve(__dirname, "../bin/version_linux.sh");
-				break;
-			default:
-				cmd = "";
-				break;
-			}
-
-			//can not get system info
-			if(cmd === "") resolve(["",""]);
-
-			let runexec = spawn(cmd, []);
-			let data = [];
-			let errorRecord = {};
-			runexec.stdout.on("data", (std_data)=>{    
-				data = ((iconv.decode(new Buffer(std_data), "BIG5")).split("\n")[0]).split("-");
-			});
-
-			runexec.stderr.on("data", (std_error)=>{
-				let error = iconv.decode(new Buffer(std_error), "BIG5");
-				debug("[STDERR]:" + error);
-				errorRecord = new Error("ERROR_SOFT_VERSION_REQ_FAIL");
-			});
-
-			runexec.on("error", (error)=>{
-				debug("[CMD ERROR]:" + error.stack);
-				errorRecord = new Error("ERROR_SOFT_VERSION_REQ_FAIL");
-			});
-
-			runexec.on("close", function(code) {
-				debug("[CMD CLOSING CODE]: " + code);
-				if( code === 0 ){
-					resolve({
-						"system_version_hash": data[0].toString().trim(),
-						"system_version_date": format(	"yyyy/MM/dd hh:mm:ss", new Date(data[1].toString().trim()*1000)),
-					});
-				}
-				else{
-					reject(errorRecord);
-				}
-			});
-		});
+module.exports.getSystemVersion = () => {
+	try {
+		const config = require("../Config");
+		return config[process.env.NODE_ENV].version;
 	}
-	catch(err){
-		throw err; 
+	catch (err) {
+		throw err;
 	}
 };
 
 /**
- * 取的目前後端git版本&日期
- * @return {Object} {system_version_hash: '', system_version_date: '' }
+ * 取的目前後端版本
+ * @return {String} X.X.X
+ * 第一碼 大改版(例如:其他商品加入本系統)
+ * 第二碼 新功能
+ * 第三碼 修正bug
+ * 一次只變更一碼
  */
-module.exports.getRemoteSystemGitVersion = () => {
-
-	try{
-		return new Promise((resolve, reject) => {
+module.exports.getRemoteSystemVersion = (requester) => {
+	const axios = require("axios");
+	const config = require("../Config");
+	try {
 		
-			const config = require("../config");
-			const policy = (config[process.env.NODE_ENV].backend.policy === "http")? require("http"): require("https");
-			
-			let postData = JSON.stringify({});
-			let httpOption = {
-				"connect":  {   
-					host: config[process.env.NODE_ENV].backend.host,
-					port: config[process.env.NODE_ENV].backend.port,
-					path:   "/api/system_info",
-					method: "POST",
-					headers: {
-						"Content-Type": "application/json",
-						"Content-Length": Buffer.byteLength(postData),
-					},
-				},
-				"data": postData,
-			};
-				
-			let httpReq = policy.request(httpOption.connect, function(response){
-
-				let data = "";
-				response.on("data", function (chunk) {
-					data += chunk;
-				});
-				response.on("end", function() {
-					resolve(JSON.parse(data).data);
-				});
-
-			}).on("error", function(e) {
-				reject(new Error("ERROR_SOFT_VERSION_REQ_FAIL"));
-			});
-		
-			//send data
-			httpReq.write(postData);
-			httpReq.end();
-		});
+		const local = config[process.env.NODE_ENV].backend.policy + "://" +
+			config[process.env.NODE_ENV].backend.host + ":" +
+			config[process.env.NODE_ENV].backend.port;
+	
+		return axios.post(local + "/version", { "data": {}, "requester": requester })
+		.then((response) => {
+			return response.data.data;
+		})
+		.catch((error) => {
+			throw (error);
+		})
 	}
-	catch(err){
-		throw err; 
+	catch (err) {
+		throw (err);
 	}
 };
 

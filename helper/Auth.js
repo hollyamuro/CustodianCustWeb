@@ -1,6 +1,6 @@
 /**
  * 系統權限控管
- * @module helper/Auth.js
+ * @module helper/Auth
  */
 
 "use strict";
@@ -16,6 +16,7 @@ module.exports = async (req, res, next) => {
 	const debug = require("debug")("CustodianCustWeb:Auth");
 	const systemInformation = require("../helper/SystemInformation");
 	const utility = require ("../helper/Utility");
+	const messageHandler = require("../helper/MessageHandler");
 	const user_type={bank:"S",normal:"C"};
 
 	try{
@@ -56,12 +57,19 @@ module.exports = async (req, res, next) => {
 			}
 		}
 		else{
-			const jwt_user_profile = await axios.post(local + "/api/cust/jwtverify", {"data":{ "token": req.cookies.access_token,}});
+			const jwt_user_profile = await axios.post(local + "/api/cust/jwtverify", {
+				"data":"", 
+				"requester":req.user_profile.user,
+				"token": req.cookies.access_token,
+				"system": "CustodianCustWeb",
+			});
 			const token = jwt_user_profile.data.data.access_token;
 			res.cookie("access_token", token, {
-				httpOnly: true,
-				secure: true
+				httpOnly: config[process.env.NODE_ENV].cookie.httpOnly, 
+				secure: config[process.env.NODE_ENV].cookie.secure
 			});
+			debug(token);
+			debug(jwt_user_profile.data.code.type);
 			switch(jwt_user_profile.data.code.type){
 			case "INFO":
 				if(jwt_user_profile.data.data.system === "CustodianCustWeb"){
@@ -110,6 +118,7 @@ module.exports = async (req, res, next) => {
 					}
 					break;
 				}else{
+					res.clearCookie("access_token");
 					res.render("home",  { 
 						"title": systemInformation.getSystemTitle(),
 						"page_title": "",
@@ -119,8 +128,8 @@ module.exports = async (req, res, next) => {
 					break;
 				}			
 			case "ERROR":
-				utility.showAlterEJSHandler(req, res, jwt_user_profile.data.code);
-				res.cookie("access_token","");
+				utility.showAlterEJSHandler(req, res, messageHandler.infoHandler("ERROR_TOKEN"));
+				res.clearCookie("access_token");
 				res.render("home",  { 
 					"title": systemInformation.getSystemTitle(),
 					"page_title": "",
@@ -129,7 +138,7 @@ module.exports = async (req, res, next) => {
 				});
 				break;
 			default:
-				res.cookie("access_token","");	
+				res.clearCookie("access_token");	
 				res.render("home",  { 
 					"title": systemInformation.getSystemTitle(),
 					"page_title": "",

@@ -4,7 +4,6 @@
  * action type & action creators
  */
 import axios from "axios";
-import { Unauthorized } from "../../SinoComponent/SinoErrorHander";
 
 /* load coupon payment */
 export const REQUEST_LOAD_DASHBOARD_COUPON = "REQUEST_LOAD_DASHBOARD_COUPON";
@@ -21,27 +20,41 @@ export const receiveLoadDashboardCoupon = (coupon) => ({
 	coupon,
 });
 export const loadDashboardCoupon = () => {
-	return async (dispatch)=>{
-		try{
-            
-			//start request
+	return async (dispatch) => {
+		try {
+
+			// start request
 			dispatch(requestLoadDashboardCoupon());
-            
-			//do get user data
+
+			// do get user data
 			const user = await axios.post(location.protocol + "//" + location.host + "/helper/user");
-            
-			//do request
+
+			// unauthorized
+			if (!user.data.code) {
+				window.location = location.protocol + "//" + location.host;
+				return;
+			}
+			else {
+				if (user.data.code.type === "ERROR") throw Error(user.data.code.message);
+			}
+
+			// do request
 			const result = await axios.post(
-				location.protocol + "//" + location.host + "/dashboard/read",{ data: { "account": user.data.data.user, } });
-        
-			//validate
-			if(!result.data.code) throw new Unauthorized();
-			if(result.data.code.type === "ERROR") throw Error(result.data.code.message);
+				location.protocol + "//" + location.host + "/dashboard/read", { data: { "account": user.data.data.user, } });
+
+			// unauthorized
+			if (!result.data.code) {
+				window.location = location.protocol + "//" + location.host;
+				return;
+			}
+			else {
+				if (result.data.code.type === "ERROR") throw Error(result.data.code.message);
+			}
 
 			//end of request
 			dispatch(receiveLoadDashboardCoupon(result.data.data));
-           
-		}catch(err){
+
+		} catch (err) {
 			dispatch(showMessage({ type: "ERROR", title: "ERROR", text: err.message, }));
 			dispatch(stopLoading());
 		}

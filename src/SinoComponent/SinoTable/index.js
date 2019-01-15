@@ -21,14 +21,14 @@ class App extends React.Component {
 		this.store = createStore(reducer, applyMiddleware(...middleWare));
 		this.store.dispatch(setTableTitle(this.props.title));
 		this.store.dispatch(setTableData(this.props.data));
-		this.store.dispatch(setTableColumns(this.props.data, this.props.column_names, this.props.column_align));
+		this.store.dispatch(setTableColumns(this.props.data, this.props.column_names, this.props.column_align, this.props.column_size));
 		this.store.dispatch(setNoDataHint(this.props.no_data_hint));
 	}
 
 	componentWillReceiveProps(nextProps) {
 		this.store.dispatch(setTableTitle(nextProps.title));
 		this.store.dispatch(setTableData(nextProps.data));
-		this.store.dispatch(setTableColumns(nextProps.data, nextProps.column_names, nextProps.column_align));
+		this.store.dispatch(setTableColumns(nextProps.data, nextProps.column_names, nextProps.column_align, nextProps.column_size));
 		this.store.dispatch(setNoDataHint(nextProps.no_data_hint));
 	}
 
@@ -46,6 +46,7 @@ App.propTypes = {
 	data: PropTypes.array.isRequired,
 	column_names: PropTypes.object.isRequired,
 	column_align: PropTypes.object.isRequired, /* left, right, center */
+	column_size: PropTypes.object.isRequired,
 	no_data_hint: PropTypes.string.isRequired,
 };
 App.defaultProps = {
@@ -53,6 +54,7 @@ App.defaultProps = {
 	data: [],
 	column_names: {},
 	column_align: {},
+	column_size: {},
 	no_data_hint: "No Data",
 };
 

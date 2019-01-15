@@ -1,10 +1,6 @@
 /**
  * 系統主體架構之controllers
  * @module controllers/SystemFrameController
- * 
- * log: 20180627 009727 針對規格開發login 
- * 		改login/home，增加user_type，發送給後台API的json物件追加登入腳色資料
- * 
  */
 
 "use strict";
@@ -16,22 +12,22 @@
  * @param  {} next
  */
 module.exports.login = async (req, res, next) => {
-	// const debug = require("debug")("CustodianCustWeb:SystemFrameController.login");
 	try{
 		const debug = require("debug")("CustodianCustWeb:systmeFrameRouteController.login");
 		const user_type={bank:"S",normal:"C"};
 		const axios = require("axios");
 		const utility = require("../helper/Utility");
 		const config = require("../Config");
+		const messageHandler = require("../helper/MessageHandler");
 		const systemInformation = require("../helper/SystemInformation");
-		// const error =  require("../helper/CustodianCustWebError");	
 		//get user ip
-		let user_ip = await utility.getUserIP();
+		//let user_ip = await utility.getUserIP();
+		let user_ip= req.headers["x-real-ip"] || req.connection.remoteAddress || req.socket.remoteAddress ||(req.connection.socket ? req.connection.socket.remoteAddress : null);
 		debug(user_ip+ " type = "+req.body.user_type);
 		const local = config[process.env.NODE_ENV].backend.policy + "://" + config[process.env.NODE_ENV].backend.host + ":" + config[process.env.NODE_ENV].backend.port;
 		if(req.body["g-recaptcha-response"] === "")
 		{
-			utility.showAlterEJSHandler(req, res, { type:"WARN", message:"請先完成google圖形驗證", });
+			utility.showAlterEJSHandler(req, res, messageHandler.infoHandler("WARN_GOOGLE_VERIFY"));
 			res.render("home",  { 
 				"title": systemInformation.getSystemTitle(),
 				"page_title": "",
@@ -61,18 +57,22 @@ module.exports.login = async (req, res, next) => {
 			{
 				debug("機器人認證失敗");
 				/* show popups */
-				utility.showAlterEJSHandler(req, res, { type:"ERROR", message:"機器人認證失敗。", });
+				utility.showAlterEJSHandler(req, res, messageHandler.infoHandler("ERROR_RACAPTCHA_CHECK_FAIL")); 
 			}
 			// get new data( Cust login):
 			const [user_profile, ] = await axios.all([ 
-				axios.post(local + "/api/cust/login", { "data": { "account": req.body.account, "password": req.body.password, "type": req.body.user_type, "googletoken":req.body["g-recaptcha-response"],},"requester": user_ip}), 
+				axios.post(local + "/api/cust/login", { 
+					"data": { "account": req.body.account, "password": req.body.password, "type": req.body.user_type, "googletoken":req.body["g-recaptcha-response"],},
+					"requester": user_ip,
+					"token": req.cookies.access_token,
+					"system": "CustodianCustWeb",
+				}), 
 			]);
-			// debug(user_profile.data);
-			// show page
+
 			if(user_profile.data.code.type==="ERROR")
 			{
-				utility.showAlterEJSHandler(req, res, { type:"ERROR", message:user_profile.data.code.message,}); 
-				// set login fail
+				utility.showAlterEJSHandler(req, res, user_profile.data.code); 
+				/* set login fail */
 				req.user_profile = {
 					"login": false,
 					"user": 			"",
@@ -85,7 +85,6 @@ module.exports.login = async (req, res, next) => {
 					"system":			"",
 				};
 									
-				// pages
 				res.render("home", { 
 					"title": systemInformation.getSystemTitle(),
 					"page_title": "",
@@ -95,16 +94,15 @@ module.exports.login = async (req, res, next) => {
 			}
 			else if(user_profile.data.data.system === "CustodianCustWeb")
 			{
-				// show result
-				utility.showAlterEJSHandler(req, res, user_profile.data.code);
-				// set access token in cookie
+				/* show result */
+				utility.showAlterEJSHandler(req, res, messageHandler.infoHandler("INFO_LOGIN_SUCCESS"));
+				/* set access token in cookie */
 				const token = user_profile.data.data.access_token;
 				res.cookie("access_token", token, {
-					httpOnly: true,
-					secure: true
+					httpOnly: config[process.env.NODE_ENV].cookie.httpOnly, 
+					secure: config[process.env.NODE_ENV].cookie.secure
 				});
-				// debug(token);
-				//set login success
+				/* set login success */
 				req.user_profile = {
 					"login": 			true,
 					"user": 			user_profile.data.data.user,
@@ -116,7 +114,6 @@ module.exports.login = async (req, res, next) => {
 					"role_list":		user_profile.data.data.role_list,
 					"system":			user_profile.data.data.system,
 				};
-				// debug(req.user_profile);
 											
 				// //render page
 				// res.render("home", { 
@@ -126,7 +123,13 @@ module.exports.login = async (req, res, next) => {
 				// 	"user_profile" : req.user_profile
 				// });
 
-				res.redirect("/dashboard");
+				//res.redirect("/dashboard");
+				debug(req.user_profile);
+				res.render("dashboard", { 
+					"title": systemInformation.getSystemTitle(),
+					"page_title": "Dashboard",
+					"user_profile" : req.user_profile,
+				});
 				
 			}else{
 				res.render("home",  { 
@@ -162,12 +165,13 @@ module.exports.logout = (req, res, next) => {
 		const user_type={bank:"S",normal:"C"};
 		const systemInformation = require("../helper/SystemInformation");
 		const utility = require ("../helper/Utility");
+		const messageHandler = require("../helper/MessageHandler");
 		
 		/* clean token */
-		res.cookie("access_token","");
 
+		res.clearCookie("access_token");
 		/* show popups */
-		utility.showAlterEJSHandler(req, res, { type:"INFO", message:"登出成功。", });
+		utility.showAlterEJSHandler(req, res, messageHandler.infoHandler("INFO_LOGOUT_SUCCESS"));
 
 		/* redirect to home */
 		res.render("home",  { 
@@ -202,12 +206,14 @@ module.exports.timeout = (req, res, next) => {
 		const systemInformation = require("../helper/SystemInformation");
 		const utility = require ("../helper/Utility");
 		const debug = require("debug")("CustodianCustWeb:systmeFrameRouteController.timeout");
+		const messageHandler = require("../helper/MessageHandler");
 		debug("timeout");
 		/* clean token */
-		res.cookie("access_token","");
+
+		res.clearCookie("access_token");
 
 		/* show popups */
-		utility.showAlterEJSHandler(req, res, { type:"INFO", message:"操作逾時請重新登入。", });
+		utility.showAlterEJSHandler(req, res, messageHandler.infoHandler("INFO_TIMEOUT"));
 
 		/* redirect to home */
 		res.render("home",  { 
@@ -240,31 +246,25 @@ module.exports.home = (req, res, next) => {
 		const debug = require("debug")("CustodianCustWeb:systmeFrameRouteController.home");
 		const user_type={bank:"S",normal:"C"};
 		const systemInformation = require("../helper/SystemInformation");
-		
+	
 		debug("*** / POST REQ Home");
-		res.render("home", { 
-			"title": systemInformation.getSystemTitle(),
-			"page_title": "",
-			"user_type":user_type,
-			"user_profile" : req.user_profile
-		});
-	}catch(e){ next(e); }
-};
-
-/**
- * demo頁面controller
- * @param  {} req
- * @param  {} res
- * @param  {} next
- */
-module.exports.demo = (req, res, next) => {
-	try{
-		const systemInformation = require("../helper/SystemInformation");
-		res.render("demo", { 
-			"title": systemInformation.getSystemTitle(),
-			"page_title": "",
-			"user_profile" : req.user_profile,
-			"verify":	true,
-		});
+		if(req.user_profile!=undefined && req.user_profile.login)
+		{
+			//res.redirect("/dashboard");
+			res.render("dashboard", { 
+				"title": systemInformation.getSystemTitle(),
+				"page_title": "Dashboard",
+				"user_profile" : req.user_profile,
+			});
+		}
+		else
+		{
+			res.render("home", { 
+				"title": systemInformation.getSystemTitle(),
+				"page_title": "",
+				"user_type":user_type,
+				"user_profile" : req.user_profile
+			});
+		}
 	}catch(e){ next(e); }
 };

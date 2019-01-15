@@ -1,10 +1,6 @@
 <header>
-    <div class="version-frame align-right">
-        <span>
-            <%= title %>
-        </span>
-    </div>
-    <nav class="navbar navbar-expand-xl navbar-light bg-light">
+    <!-- <nav class="navbar navbar-expand-xl navbar-light bg-light"> -->
+    <nav class="navbar navbar-expand-xl" style="background-color: #ffffff;">
         <div>
             <a class="navbar-brand">
                 <img class="sinopac-header-icon" src="/images/logo.png" alt="sinopac logo">
@@ -12,3 +8,6 @@
         </div>
     </nav>
 </header>
+<% if( typeof user_profile === 'undefined' || !user_profile.login) { %>
+    <hr class="nav-divider">
+<% } %>

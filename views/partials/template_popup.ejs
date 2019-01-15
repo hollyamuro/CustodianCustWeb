@@ -1,36 +1,44 @@
-<div class="modal fade  bd-example-modal-sm" id="popup-modal">
+<link rel='stylesheet' href='/css/view_style/custodian_cust_web_style.css' />
+
+<div class="modal fade bd-example-modal-sm" id="popup-modal">
     <div class="modal-dialog modal-sm">
         <div class="modal-content">
 
             <div class="modal-header">
-                <h5 class="modal-title">
+                <h5 class="modal-title verify-modal-title">
                     <% if ( popup.type === 'INFO') { %>
-                        <span>Information</span>
-                        <% }else if ( popup.type === 'WARN'){ %>
-                            <span>Warning</span>
-                            <% }else if ( popup.type === 'ERROR'){ %>
-                                <span>Error</span>
-                                <% } %>
+                        <span class="title-text">
+                            <%= popup.title %>
+                        </span>
+                    <% }else if ( popup.type === 'WARN'){ %>
+                        <span class="title-text">
+                            <%= popup.title %>
+                        </span>
+                    <% }else if ( popup.type === 'ERROR'){ %>
+                        <span class="title-text">
+                            <%= popup.title %>
+                        </span>
+                    <%}%>
                 </h5>
+
                 <button type="button" class="close" data-dismiss="modal">
                     <span>&times;</span>
                 </button>
             </div>
 
-            <div class="modal-body">
-                <p>
-                    <%= popup.message %>
-                </p>
+            <div class="modal-body verify-modal-body">
+                <p><%= popup.message %></p>
             </div>
+
             <div class="modal-footer">
-                <button type="button" class="btn btn-primary btn-block" data-dismiss="modal">Confirm</button>
+                <button type="button" class="btn block-btn verify-btn" data-dismiss="modal">Confirm</button>
             </div>
 
         </div>
     </div>
 </div>
 
-<script>
+<script nonce="<%= locals.nonce%>">
     $(window).on('load', function () {
         $('#popup-modal').modal('show');
     });

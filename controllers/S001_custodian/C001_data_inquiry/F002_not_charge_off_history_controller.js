@@ -1,6 +1,6 @@
 /**
  * 庫存查詢 controller
- * @module controllers/S001_custodian/C001_data_inquiry/F002_not_charge_off_history_controller.js
+ * @module controllers/S001_custodian/C001_data_inquiry/F002_not_charge_off_history_controller
  */
 
 "use strict";
@@ -34,11 +34,23 @@ module.exports.read = async (req, res, next) => {
 	try{
 		const axios = require("axios");
 		const config = require("../../../Config");
+		const utility = require ("../../../helper/Utility");
+		const Error = require("../../../helper/CustodianCustWebError");
 		const local = 	config[process.env.NODE_ENV].backend.policy + "://" + 
 						config[process.env.NODE_ENV].backend.host + ":" +
 						config[process.env.NODE_ENV].backend.port;
-		const result = await axios.post( local + "/api/cust/custodian/not_charge_off_history",{"data": req.body.data, "requester":req.user_profile.user });
-		res.send(result.data); 
+		let isInputDataVaild = await utility.checkInputData(req.body.data);
+		if(isInputDataVaild){
+			const result = await axios.post( local + "/api/cust/custodian/not_charge_off_history",{
+				"data": req.body.data, 
+				"requester":req.user_profile.user, 
+				"token": req.cookies.access_token,
+				"system": "CustodianCustWeb",
+			 });
+			res.send(result.data);
+		}else{
+			throw new Error.BadRequest();
+		} 
 
 	}catch(e){ next(e); }
 };

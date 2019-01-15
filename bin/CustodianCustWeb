@@ -8,6 +8,9 @@
 
 "use strict";
 
+/**
+ * 主程式
+ */
 const main = () => {
 
 	/**
@@ -78,7 +81,7 @@ const main = () => {
 	const app = require("../app");
 	const debug = require("debug")("CustodianCustWeb:server");
 	const http = require("http");
-	const https = require("https");
+	//const https = require("https");
 	const config = require("../Config");
 	const ciMethod = require("../ci_tools/CommonMethod");
 
@@ -93,34 +96,34 @@ const main = () => {
 	 * Create HTTP server.
 	 */
 
-	//let server = http.createServer(app);
-	let server = {};
-	if(config[process.env.NODE_ENV].policy==="http"){
-		server = http.createServer(app);
-	}
-	else{
+	let server = http.createServer(app);
+	// let server = {};
+	// if(config[process.env.NODE_ENV].policy==="http"){
+	// 	server = http.createServer(app);
+	// }
+	// else{
 
-		/*SSL*/
-		if(process.env.NODE_ENV === "production"){
-			let fs = require("fs");
-			let key = fs.readFileSync("ssl/CustodianCustWebProd.pem");
-			let cert = fs.readFileSync("ssl/CustodianCustWebProd.crt.pem");
-			let ca = fs.readFileSync("ssl/CustodianCustWebProd.csr");
-			server = https.createServer({ key: key, cert: cert, ca: ca}, app);
-		}
-		else{
+	// 	/*SSL*/
+	// 	if(process.env.NODE_ENV === "production"){
+	// 		let fs = require("fs");
+	// 		let key = fs.readFileSync("ssl/CustodianCustWebProd.pem");
+	// 		let cert = fs.readFileSync("ssl/CustodianCustWebProd.crt.pem");
+	// 		let ca = fs.readFileSync("ssl/CustodianCustWebProd.csr");
+	// 		server = https.createServer({ key: key, cert: cert, ca: ca}, app);
+	// 	}
+	// 	else{
 
-			let fs = require("fs");
-			let key = fs.readFileSync("ssl/CustodianCustWebDev.pem");
-			let cert = fs.readFileSync("ssl/CustodianCustWebDev.crt.pem");
-			let ca = fs.readFileSync("ssl/CustodianCustWebDev.csr");
-			server = https.createServer({ key: key, cert: cert, ca: ca}, app);
-		}
+	// 		let fs = require("fs");
+	// 		let key = fs.readFileSync("ssl/CustodianCustWebDev.pem");
+	// 		let cert = fs.readFileSync("ssl/CustodianCustWebDev.crt.pem");
+	// 		let ca = fs.readFileSync("ssl/CustodianCustWebDev.csr");
+	// 		server = https.createServer({ key: key, cert: cert, ca: ca}, app);
+	// 	}
 
-		//[TODO: need fix this issue in the future]
-		/* Overcome the DEPTH_ZERO_SELF_SIGNED_CERT  */
-		process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
-	}
+	// 	//[TODO: need fix this issue in the future]
+	// 	/* Overcome the DEPTH_ZERO_SELF_SIGNED_CERT  */
+	// 	process.env.NODE_TLS_REJECT_UNAUTHORIZED = "0";
+	// }
 
 	/**
    * Listen on provided port, on all network interfaces.

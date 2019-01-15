@@ -9,12 +9,12 @@ const TableTitleComponent = ({ title }) => (
 	</div>
 );
 
-TableTitleComponent.prototype = {
+TableTitleComponent.propTypes = {
 	title: Proptypes.string.isRequired,
 };
 
 TableTitleComponent.defaultProps = {
-	title: "123",
+	title: "",
 };
 
 export default TableTitleComponent;

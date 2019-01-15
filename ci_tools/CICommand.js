@@ -1,6 +1,6 @@
 /**
  * forever對外接口(npm用)
- * @module controllers/CommonMethod.js
+ * @module controllers/CommonMethod
  */
 
 "use strict";

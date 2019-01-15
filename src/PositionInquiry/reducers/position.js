@@ -1,7 +1,7 @@
 import {
 	RECEIVE_LOAD_POSITION,
 	SET_QUERY_DATE,
-	RESET_POSITION,
+	SET_POSITION,
 } from "../actions";
 
 export const position = ( 
@@ -15,7 +15,7 @@ export const position = (
 ) => {
 	switch(action.type){
 	case RECEIVE_LOAD_POSITION:
-	case RESET_POSITION:
+	case SET_POSITION:
 		return action.position;
 	default:
 		return state;

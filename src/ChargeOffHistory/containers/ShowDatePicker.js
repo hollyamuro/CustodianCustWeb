@@ -6,6 +6,7 @@ import { setFromQueryDate, setToQueryDate } from "../actions";
 
 const mapStateToProps = state => ({
 	title: "Value Date",
+	show_hint: true,
 	date: state.queryDate,
 });
 

@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 
 import "../style.css";
 
-const TableHeaderComponent = ({ text, status, onItemClick }) => (
+const TableHeaderComponent = ({ text, status }) => (
 	<div>
 		<span className="sino-table-header-sort">{text}</span>
 		{(status === 0) ? (
