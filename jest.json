@@ -1,0 +1,16 @@
+{
+    "collectCoverage": true,
+    "coverageReporters": [
+        "json",
+        "html"
+    ],
+    "collectCoverageFrom": [
+        "**/src/**/*.{js,jsx}",
+        "!**/node_modules/**",
+        "!**/vendor/**",
+        "!**/public/**"
+    ],
+    "moduleNameMapper": {
+        "\\.(css)$": "identity-obj-proxy"
+    }
+}

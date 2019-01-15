@@ -1,0 +1,74 @@
+/* align */
+.align-right{
+    text-align: right;
+}
+
+.align-left{
+    text-align: left;
+}
+
+.align-center{
+    text-align: center;
+}
+
+.inline{
+    display: inline-block;  
+}
+
+.verify-card-header{
+    margin: 0px;
+    background-color: transparent;
+    border: none;
+}
+
+.verify-card-body{
+    margin: 0px;
+    padding-top: 0px;
+    padding-bottom: 0px;
+}
+
+.verify-card{
+    border: 1px solid #c43343;
+    margin: 50px 0px;
+}
+
+.verify-input{
+    width: 100%;
+    height: auto;
+    border-radius: 5px;
+    border: 1px solid #9c9c9c;
+    padding: 3px 5px;
+}
+
+.verify-btn{
+    color: #ffffff;
+    background-color: #c43343;
+}
+
+hr.verify-card-divider {
+    border-top: 1px solid #e21f23;
+    margin: 0px;
+}
+  
+.block-btn{
+    width: 100%;
+}
+
+.login-card {
+    padding: 0px 20px;
+    border-radius: 10px;
+}
+
+.verify-modal-title{
+    color: #c43343;
+}
+
+.verify-radio{
+    margin-left: 15px;
+    margin-right: 3px;
+}
+
+.verify-modal-body{
+    /* word-break: break-word; */
+    word-wrap:break-word;
+}

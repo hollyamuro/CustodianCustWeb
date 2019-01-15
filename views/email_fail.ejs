@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+		<% include partials/template_head.ejs %>
+		<link rel='stylesheet' href='/css/view_style/custodian_cust_web_style.css' />
+    </head>
+    <body>
+        <% include partials/template_body.ejs %>
+        <% include partials/template_nav_header.ejs %>
+    
+        <% if(locals.show_popup){ %>
+            <% var popup = locals.popup; %>
+            <% include partials/template_popup.ejs %>
+        <% } %>
+            <form class="inline" autocomplete="off" action="<%- EmailUrl %>" method="post" id="myForm"> 
+                <button type="submit" hidden> </button>
+            </form>                        
+        <% include partials/template_footer.ejs %>
+    </body>  
+</html>
+
+<script nonce= "<%= locals.nonce%>" type="text/javascript">
+	let t = 1;
+	let EmailUrl = "<%- EmailUrl%>";
+	function showTime()
+	{
+        t -= 1;
+        if(t==0)
+        {
+            document.getElementById("myForm").submit()
+        }
+        setTimeout("showTime()",1000);
+	}
+	window.history.forward(1);
+	showTime();
+</script>
